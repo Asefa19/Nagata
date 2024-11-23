@@ -1,7 +1,7 @@
 from llama_cpp import Llama
 
 
-model_gguf="./models/astrollama-3-8b-chat_summary.Q8_0.gguf"
+model_gguf="/Nagata/model/astrollama-3-8b-chat_summary.Q8_0.gguf"
 
 # Set gpu_layers to the number of layers to offload to GPU. Set to 0 if no GPU acceleration is available on your system.
 llm = Llama(
