@@ -1,17 +1,24 @@
 from PySide6.QtCore import QSize, Qt
-from PySide6.QtWidgets import QMainWindow, QDockWidget, QWidget, QLabel
+from PySide6.QtWidgets import QApplication, QMainWindow, QDockWidget, QWidget, QLabel, QVBoxLayout
 from PySide6.QtGui import QPixmap
 
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        
+        screen_Bounds = QApplication.primaryScreen().geometry()
+        window_width = 900
+        window_height = 800
+        x = screen_Bounds.width() - window_width
+        y = screen_Bounds.height() - window_height - screen_Bounds.y()
+        
+        self.setGeometry(x ,y, window_width, window_height)
+                
         self.setWindowTitle("Nagata")
-        self.setMinimumSize(QSize(1920,1080))
-        self.setMaximumSize(QSize(3440,1440))
-        self.setBaseSize(QSize(1920,1080))
-        # self.setWindowFlags(Qt.FramelessWindowHint)
-        # self.setAttribute(Qt.WA_TranslucentBackground)
+
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
+
         
-        
-    
+                
