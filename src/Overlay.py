@@ -1,5 +1,5 @@
 import sys
-from MainWindow import MainWindow
+from MainWindow import *
 from DragButton import DragButton
 from PySide6.QtCore import Qt, QSize
 from PySide6.QtGui import QPixmap, QImage, QIcon

@@ -1,29 +1,44 @@
-from DragLabel import DragLabel
-from PySide6.QtCore import QSize, Qt
-from PySide6.QtWidgets import QMainWindow, QDockWidget, QWidget, QLabel, QVBoxLayout, QHBoxLayout, QSpacerItem, QSizePolicy
-from PySide6.QtGui import QPixmap, QIcon
+from DragLabel import *
+from EventFilter import EventFilter
+from PySide6.QtCore import Qt, QEvent
+from PySide6.QtWidgets import (
+    QMainWindow,
+    QDockWidget,
+    QWidget,
+    QLabel,
+    QVBoxLayout,
+    QHBoxLayout,
+    QSpacerItem,
+    QSizePolicy,
+)
+from PySide6.QtGui import QPixmap
 
 
 class MainWindow(QMainWindow):
+    
     def __init__(self):
         super().__init__()
-        self.setMinimumSize(1920,1080)
+        self.setMinimumSize(1920, 1080)
         self.setBaseSize(1920, 1080)
-        
+
+        # Transparency Flags
         # self.setWindowFlags(Qt.FramelessWindowHint)
         # self.setAttribute(Qt.WA_TranslucentBackground)
-        
+
         self.central_Widget = QWidget(self)
         self.setCentralWidget(self.central_Widget)
-        
+
         # Setup dock
         dock_Widget = QDockWidget(self)
-        dock_Widget.setFeatures = dock_Widget.DockWidgetFeature.DockWidgetFloatable | dock_Widget.DockWidgetFeature.DockWidgetMovable
+        dock_Widget.setFeatures = (
+            dock_Widget.DockWidgetFeature.DockWidgetFloatable
+            | dock_Widget.DockWidgetFeature.DockWidgetMovable
+        )
         self.addDockWidget(Qt.LeftDockWidgetArea, dock_Widget)
-        
+
         central_Layout = QVBoxLayout()
-        
-        # self.tray_Button = DragButton()
+
+        # Tray for the overlay
         self.tray_Label = DragLabel()
         self.tray_Logo = "/Nagata/Nagata/assets/img/nagata_logo_40x39.png"
         self.pixmap = QPixmap(self.tray_Logo)
@@ -34,29 +49,46 @@ class MainWindow(QMainWindow):
         else:
             self.tray_Label.setPixmap(self.pixmap)
             # self.tray_Label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
-            
+
+        self.tray_Label.setAttribute(Qt.WA_Hover, True)
+
         dock_Widget.setWidget(self.tray_Label)
         central_Layout.addWidget(dock_Widget)
-        
+
         self.setLayout(central_Layout)
 
-        self.top_spacer = QSpacerItem(20,40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        # Setup chat_History
+
+        # spacers aren't what I imagined them to be. Look into making the label visible,
+        # with background behind
+
+        self.top_spacer = QSpacerItem(
+            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        )
         central_Layout.addItem(self.top_spacer)
 
-        bottom_layout= QHBoxLayout()
+        bottom_layout = QHBoxLayout()
         self.central_Widget.setLayout(bottom_layout)
 
-        self.left_spacer = QSpacerItem(40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum)
+        self.left_spacer = QSpacerItem(
+            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        )
         bottom_layout.addItem(self.left_spacer)
-
+        
         chat_Widget = QWidget()
-        chat_Widget.setStyleSheet("background-color: lightgreen;")
-        chat_Label = QLabel("Hello World!", chat_Widget)
-        
-        chat_Label.setAlignment(Qt.AlignBottom | Qt.AlignRight)
-        
-        bottom_layout.addWidget(chat_Label) 
-        bottom_layout.addWidget(chat_Widget)
+        # chat_Widget.setStyleSheet("border: 10px solid black;")
 
+        chat_Label = QLabel("Hello World!", chat_Widget)
+        chat_Label.setStyleSheet(
+            "border: 1px solid black; background-color: lightgreen;"
+        )
+        chat_Label.setWordWrap(True)
+        chat_Label.setAlignment(Qt.AlignBottom | Qt.AlignRight)
+
+        bottom_layout.addWidget(chat_Label)
+        bottom_layout.addWidget(chat_Widget)
         
-    
+        # Event Filter
+        self.e_filter = EventFilter()
+        self.tray_Label.installEventFilter(self.e_filter)
+
