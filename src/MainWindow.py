@@ -1,6 +1,6 @@
 from DragLabel import *
 from EventFilter import EventFilter
-from PySide6.QtCore import Qt, QEvent
+from PySide6.QtCore import Qt, QRect
 from PySide6.QtWidgets import (
     QMainWindow,
     QDockWidget,
@@ -11,15 +11,13 @@ from PySide6.QtWidgets import (
     QSpacerItem,
     QSizePolicy,
 )
-from PySide6.QtGui import QPixmap
+from PySide6.QtGui import QPixmap, QScreen
 
 
 class MainWindow(QMainWindow):
     
     def __init__(self):
         super().__init__()
-        self.setMinimumSize(1920, 1080)
-        self.setBaseSize(1920, 1080)
 
         # Transparency Flags
         # self.setWindowFlags(Qt.FramelessWindowHint)
