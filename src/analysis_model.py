@@ -7,7 +7,7 @@ model_gguf="/Nagata/model/astrollama-3-8b-chat_summary.Q8_0.gguf"
 llm = Llama(
   model_path=model_gguf,  # Download the model file first
   n_ctx=1024,  # The max sequence length to use - note that longer sequence lengths require much more resources
-  n_threads=8,            # The number of CPU threads to use, tailor to your system and the resulting performance
+  n_threads=16,            # The number of CPU threads to use, tailor to your system and the resulting performance
   n_gpu_layers=35         # The number of layers to offload to GPU, if you have GPU acceleration available
 )
 
@@ -24,10 +24,10 @@ output = llm(
 llm = Llama(model_path=model_gguf, chat_format="llama-2")  # Set chat_format according to the model you are using
 response = llm.create_chat_completion(
     messages = [
-        {"role": "system", "content": "You are an assistant."},
+        {"role": "system", "content": "You are a chatbot / analysis assistant."},
         {
             "role": "user",
-            "content": "What is redshift?" 
+            "content": "How many days does the earth take to rotate around the sun and can you calculate its current position along this path?" 
         }
     ]
 )
