@@ -74,6 +74,7 @@ class MainWindow(QMainWindow):
         bottom_layout.addItem(self.left_spacer)
         
         chat_Widget = QWidget()
+        chat_Widget.setFixedSize(0,900)
         # chat_Widget.setStyleSheet("border: 10px solid black;")
 
         chat_Label = QLabel("Hello World!", chat_Widget)
@@ -82,6 +83,7 @@ class MainWindow(QMainWindow):
         )
         chat_Label.setWordWrap(True)
         chat_Label.setAlignment(Qt.AlignBottom | Qt.AlignRight)
+        chat_Label.setFixedSize(300, 500)
 
         bottom_layout.addWidget(chat_Label)
         bottom_layout.addWidget(chat_Widget)
@@ -89,4 +91,3 @@ class MainWindow(QMainWindow):
         # Event Filter
         self.e_filter = EventFilter()
         self.tray_Label.installEventFilter(self.e_filter)
-

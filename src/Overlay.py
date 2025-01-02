@@ -11,8 +11,8 @@ window = MainWindow()
 screen = app.primaryScreen()
 available_Geometry = screen.geometry()
 
-height = available_Geometry.height()
-width = available_Geometry.width()
+height = (available_Geometry.height()-70)
+width = (available_Geometry.width())
 
 window.setFixedSize(width, height)
 
