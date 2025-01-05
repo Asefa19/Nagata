@@ -1,9 +1,6 @@
 import sys
 from MainWindow import *
-from DragButton import DragButton
-from PySide6.QtCore import Qt, QSize
-from PySide6.QtGui import QPixmap, QImage, QIcon, QScreen
-from PySide6.QtWidgets import QApplication, QDockWidget, QWidget, QLabel, QVBoxLayout
+from PySide6.QtWidgets import QApplication
 
 app = QApplication([])
 window = MainWindow()

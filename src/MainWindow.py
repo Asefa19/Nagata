@@ -20,8 +20,8 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         # Transparency Flags
-        # self.setWindowFlags(Qt.FramelessWindowHint)
-        # self.setAttribute(Qt.WA_TranslucentBackground)
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setAttribute(Qt.WA_TranslucentBackground)
 
         self.central_Widget = QWidget(self)
         self.setCentralWidget(self.central_Widget)
@@ -46,7 +46,7 @@ class MainWindow(QMainWindow):
 
         else:
             self.tray_Label.setPixmap(self.pixmap)
-            # self.tray_Label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
+            self.tray_Label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         self.tray_Label.setAttribute(Qt.WA_Hover, True)
 
@@ -91,3 +91,5 @@ class MainWindow(QMainWindow):
         # Event Filter
         self.e_filter = EventFilter()
         self.tray_Label.installEventFilter(self.e_filter)
+        
+        
