@@ -1,0 +1,18 @@
+from PySide6.QtCore import QObject, QEvent
+from PySide6.QtWidgets import QLabel, QWidget
+from Carousel import *
+
+class EventFilter(QObject):
+    def __init__(self):
+        super(EventFilter, self).__init__()
+        
+    def eventFilter(self, obj,event):
+        if isinstance(obj,QLabel):
+            if event.type() == QEvent.HoverEnter:
+                # tray expands
+                self.carousel = Carousel(self).__init__(self.carousel, self)
+            elif event.type() == QEvent.HoverLeave:
+                print("Mouse left!")
+                # tray hides
+        return super().eventFilter(obj, event)
+    
