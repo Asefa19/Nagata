@@ -1,4 +1,5 @@
 from DragLabel import *
+from model_selection import *
 from EventFilter import EventFilter
 from PySide6.QtCore import Qt, QRect
 from PySide6.QtWidgets import (

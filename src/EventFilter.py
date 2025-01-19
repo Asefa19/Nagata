@@ -5,7 +5,9 @@ from Carousel import *
 class EventFilter(QObject):
     def __init__(self):
         super(EventFilter, self).__init__()
-        
+    
+    # instead of building carousel here, just return a bool that 
+    # tells us whether or not we are hovering the tray. 
     def eventFilter(self, obj,event):
         if isinstance(obj,QLabel):
             if event.type() == QEvent.HoverEnter:
@@ -14,5 +16,9 @@ class EventFilter(QObject):
             elif event.type() == QEvent.HoverLeave:
                 print("Mouse left!")
                 # tray hides
+    
+        if isinstance(obj,QPushButton):
+            if event.type() == QEvent.
+            
         return super().eventFilter(obj, event)
     

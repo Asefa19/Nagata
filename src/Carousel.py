@@ -3,6 +3,10 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget
 )
+from ModelSelection import *
+
+# Build in mainwindow instead of eventfilter,
+# will make getting and sending info in and out a lot easier.
 
 class Carousel(QWidget):
     def __init__(self, parent):
@@ -22,6 +26,16 @@ class Carousel(QWidget):
         layout.addWidget(parent.carousel.option1)
         layout.addWidget(parent.carousel.option2)
         layout.addWidget(parent.carousel.option3)
+        
+        model_Selector = ModelSelection()
+        selected = 0
+        if parent.carousel.option1.pressed():
+            if selected == 0:
+                model_Selector.select(1)
+                selected = 1
+            else:
+                model_Selector.select(0)
+                selected = 0
         
         parent.carousel.setLayout(layout)
         parent.carousel.show()
