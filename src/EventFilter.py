@@ -3,6 +3,8 @@ from PySide6.QtWidgets import QLabel, QWidget
 from Carousel import *
 
 class EventFilter(QObject):
+    build = False
+    
     def __init__(self):
         super(EventFilter, self).__init__()
     
@@ -12,13 +14,10 @@ class EventFilter(QObject):
         if isinstance(obj,QLabel):
             if event.type() == QEvent.HoverEnter:
                 # tray expands
-                self.carousel = Carousel(self).__init__(self.carousel, self)
+                build = True
             elif event.type() == QEvent.HoverLeave:
                 print("Mouse left!")
                 # tray hides
-    
-        if isinstance(obj,QPushButton):
-            if event.type() == QEvent.
-            
+
         return super().eventFilter(obj, event)
     

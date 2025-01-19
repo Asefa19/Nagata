@@ -29,13 +29,13 @@ class Carousel(QWidget):
         
         model_Selector = ModelSelection()
         selected = 0
-        if parent.carousel.option1.pressed():
+        if parent.carousel.option1.pressed:
             if selected == 0:
-                model_Selector.select(1)
                 selected = 1
+                model_Selector.select(selected)
             else:
-                model_Selector.select(0)
                 selected = 0
+                model_Selector.select(selected)
         
         parent.carousel.setLayout(layout)
         parent.carousel.show()
