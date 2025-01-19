@@ -6,35 +6,29 @@ from llama_cpp import Llama
 #
 class ModelSelection():
 
-    def select():
-        selected_Model = 0
+    def select(selected_Model):
+        # selected_Model = 0
         match selected_Model:
+            # Case 0 = analysis model
             case 0:
                 model = analysis_model("/Nagata/model/astrollama-3-8b-chat_summary.Q8_0.gguf")
                 role = "Data Analyst for Astronomy"
-                
-                while(True):
-                    user_TextInput = ModelSelection.listen()
-                        # pass to model content
-                    rsp = ModelSelection.response(user_TextInput, role, model)
-                    # send rsp to chat label
-                
+                return model, role
+            # Case 1 = report model
             case 1:
                 model = report_Model("/Nagata/model/astrollama-3-8b-chat_summary.Q8_0.gguf")
                 role = "Report writer and critic for Astronomy"
-                
-                while(True):
-                    user_TextInput = ModelSelection.listen()
-                    rsp = ModelSelection.response(user_TextInput, role, model)
-            
+                return model, role
 
-    def response(content, role, model):
+
+    def response(role, model):
+        user_TextInput = ModelSelection.listen()
         rsp = model.llm.create_chat_completion(
         messages = [
             {"role": "system", "content": f"You are a {role}"},
                 {
                 "role": "user",
-                "content": f"{content}"
+                "content": f"{user_TextInput}"
                 }
             ]
         )
