@@ -6,7 +6,7 @@ from llama_cpp import Llama
 #
 class ModelSelection():
 
-    def select(selected_Model):
+    def select(self, selected_Model):
         # selected_Model = 0
         match selected_Model:
             # Case 0 = analysis model
@@ -21,7 +21,7 @@ class ModelSelection():
                 return model, role
 
 
-    def response(role, model):
+    def response(self, role, model):
         user_TextInput = ModelSelection.listen()
         rsp = model.llm.create_chat_completion(
         messages = [
@@ -34,7 +34,7 @@ class ModelSelection():
         )
         return rsp
     
-    def listen():
+    def listen(self):
         user_VoiceInput = sr.Recognizer()
         transcription = transcribe(user_VoiceInput)
         print(transcription)
