@@ -2,7 +2,7 @@ import speech_recognition as sr
 #import PyAudio
 
 # Init recognizer
-def transcribe(userVoiceRecognizer):
+def transcribe(self, userVoiceRecognizer):
 
     while(1):
         try:

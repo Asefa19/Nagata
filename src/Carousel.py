@@ -4,17 +4,18 @@ from PySide6.QtWidgets import (
     QWidget
 )
 from ModelSelection import *
+from DataAnalyzer import *
 
 # Build in mainwindow instead of eventfilter,
 # will make getting and sending info in and out a lot easier.
 
 class Carousel(QWidget):
     def __init__(self, parent):
-        Carousel.buildCarousel(parent)
+        Carousel.buildCarousel(self, parent)
         
         super(Carousel, self).__init__()
         
-    def buildCarousel(parent) -> QWidget:
+    def buildCarousel(self, parent) -> QWidget:
         
         parent.carousel = QWidget()
         parent.carousel.setFixedSize(100,300)
@@ -28,14 +29,28 @@ class Carousel(QWidget):
         layout.addWidget(parent.carousel.option3)
         
         model_Selector = ModelSelection()
-        selected = 0
-        if parent.carousel.option1.pressed:
-            if selected == 0:
-                selected = 1
-                model_Selector.select(selected)
-            else:
-                selected = 0
-                model_Selector.select(selected)
         
         parent.carousel.setLayout(layout)
         parent.carousel.show()
+        
+        def on_Switch_Model():
+            if parent.carousel.option1.clicked:
+                if model_Selector.selected == 0:
+                    model_Selector.selected = 1
+                    model_Selector.select(1)
+                    print("Report Model")
+                else:
+                    model_Selector.selected = 0
+                    model_Selector.select(0)
+                    print("Analysis Model")
+        
+        def on_option2():
+            global data_analyzer
+            data_analyzer = DataAnalyzer()
+            data_analyzer.show()
+            
+        parent.carousel.option1.clicked.connect(on_Switch_Model)
+        parent.carousel.option2.clicked.connect(on_option2)
+
+        
+        

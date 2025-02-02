@@ -5,18 +5,18 @@ from llama_cpp import Llama
 # Setting up new directory
 #
 class ModelSelection():
-
+    selected = 0
     def select(self, selected_Model):
         # selected_Model = 0
         match selected_Model:
             # Case 0 = analysis model
             case 0:
-                model = analysis_model("/Nagata/model/astrollama-3-8b-chat_summary.Q8_0.gguf")
+                model = analysis_model(self, "/Nagata/model/astrollama-3-8b-chat_summary.Q8_0.gguf")
                 role = "Data Analyst for Astronomy"
                 return model, role
             # Case 1 = report model
             case 1:
-                model = report_Model("/Nagata/model/astrollama-3-8b-chat_summary.Q8_0.gguf")
+                model = report_Model(self, "/Nagata/model/astrollama-3-8b-chat_summary.Q8_0.gguf")
                 role = "Report writer and critic for Astronomy"
                 return model, role
 

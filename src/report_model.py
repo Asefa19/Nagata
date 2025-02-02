@@ -1,13 +1,14 @@
 from llama_cpp import Llama
 
-def report_Model(model_gguf):
+def report_Model(self, model_gguf):
 
   # Set gpu_layers to the number of layers to offload to GPU. Set to 0 if no GPU acceleration is available on your system.
   llm = Llama(
     model_path=model_gguf,  # Download the model file first
-    n_ctx=1024,  # The max sequence length to use - note that longer sequence lengths require much more resources
+    n_ctx=512,  # The max sequence length to use - note that longer sequence lengths require much more resources
     n_threads=8,            # The number of CPU threads to use, tailor to your system and the resulting performance
-    n_gpu_layers=35         # The number of layers to offload to GPU, if you have GPU acceleration available
+    n_gpu_layers=32,         # The number of layers to offload to GPU, if you have GPU acceleration available
+    chat_format="llama-2"
   )
 
   # Simple inference example

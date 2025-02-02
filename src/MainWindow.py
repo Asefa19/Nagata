@@ -90,15 +90,10 @@ class MainWindow(QMainWindow):
         bottom_layout.addWidget(chat_Label)
         bottom_layout.addWidget(chat_Widget)
         
-        carousel = Carousel(self)
-        
         # Event Filter
         self.e_filter = EventFilter()
         self.tray_Label.installEventFilter(self.e_filter)
         
-        while (self.e_filter.build == True):
-            carousel.__init__(carousel, self)
-            if carousel.closeEvent():
-                build = False
+
         
         

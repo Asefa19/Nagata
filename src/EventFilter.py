@@ -14,7 +14,7 @@ class EventFilter(QObject):
         if isinstance(obj,QLabel):
             if event.type() == QEvent.HoverEnter:
                 # tray expands
-                build = True
+                self.carousel = Carousel(self).__init__(self.carousel, self)
             elif event.type() == QEvent.HoverLeave:
                 print("Mouse left!")
                 # tray hides
