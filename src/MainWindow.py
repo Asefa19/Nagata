@@ -1,6 +1,6 @@
-from DragLabel import *
-from ModelSelection import *
-from Carousel import *
+from DragLabel import DragLabel
+from ModelSelection import ModelSelection
+from Carousel import Carousel
 from EventFilter import EventFilter
 from PySide6.QtCore import Qt, QRect
 from PySide6.QtWidgets import (
@@ -40,7 +40,7 @@ class MainWindow(QMainWindow):
 
         # Tray for the overlay
         self.tray_Label = DragLabel()
-        self.tray_Logo = "/Nagata/Nagata/assets/img/nagata_logo_40x39.png"
+        self.tray_Logo = "../assets/img/nagata_logo_40x39.png"
         self.pixmap = QPixmap(self.tray_Logo)
 
         if self.pixmap.isNull():

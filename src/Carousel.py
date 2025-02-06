@@ -3,8 +3,8 @@ from PySide6.QtWidgets import (
     QVBoxLayout,
     QWidget
 )
-from ModelSelection import *
-from DataAnalyzer import *
+from ModelSelection import ModelSelection
+from DataAnalyzer import DataAnalyzer
 
 # Build in mainwindow instead of eventfilter,
 # will make getting and sending info in and out a lot easier.
@@ -13,7 +13,7 @@ class Carousel(QWidget):
     def __init__(self, parent):
         Carousel.buildCarousel(self, parent)
         
-        super(Carousel, self).__init__()
+        #super(Carousel, self).__init__()
         
     def buildCarousel(self, parent) -> QWidget:
         
