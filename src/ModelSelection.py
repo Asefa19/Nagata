@@ -5,7 +5,7 @@ from llama_cpp import Llama
 import speech_recognition as sr
 
 # Setting up new directory
-#
+
 class ModelSelection():
     selected = 0
     def select(self, selected_Model):
@@ -13,12 +13,14 @@ class ModelSelection():
         match selected_Model:
             # Case 0 = analysis model
             case 0:
-                model = analysis_model(self, "../../model/astrollama-3-8b-chat_summary.i1-Q4_K_M.gguf")
+                # model = analysis_model(self, "../../model/astrollama-3-8b-chat_summary.i1-Q4_K_M.gguf")
+                model = analysis_model(self, "../../model/astrollama-3-8b-chat_summary.Q8_0.gguf")
                 role = "Data Analyst for Astronomy"
                 return model, role
             # Case 1 = report model
             case 1:
-                model = report_model(self, "../../model/astrollama-3-8b-chat_summary.i1-Q4_K_M.gguf")
+                # model = report_model(self, "../../model/astrollama-3-8b-chat_summary.i1-Q4_K_M.gguf")
+                model = report_model(self, "../../model/astrollama-3-8b-chat_summary.Q8_0.gguf")
                 role = "Report writer and critic for Astronomy"
                 return model, role
 

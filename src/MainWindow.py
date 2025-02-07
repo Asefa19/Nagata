@@ -40,7 +40,7 @@ class MainWindow(QMainWindow):
 
         # Tray for the overlay
         self.tray_Label = DragLabel()
-        self.tray_Logo = "../assets/img/nagata_logo_40x39.png"
+        self.tray_Logo = "../../Nagata/assets/img/nagata_logo_40x39.png"
         self.pixmap = QPixmap(self.tray_Logo)
 
         if self.pixmap.isNull():
