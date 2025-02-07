@@ -1,6 +1,6 @@
 from llama_cpp import Llama
 
-def report_Model(self, model_gguf):
+def report_model(self, model_gguf):
 
   # Set gpu_layers to the number of layers to offload to GPU. Set to 0 if no GPU acceleration is available on your system.
   llm = Llama(

@@ -1,6 +1,6 @@
 from analysis_model import analysis_model
 from report_model import report_model
-from transcription import transcription
+from transcription import transcribe
 from llama_cpp import Llama
 # Setting up new directory
 #
@@ -16,7 +16,7 @@ class ModelSelection():
                 return model, role
             # Case 1 = report model
             case 1:
-                model = report_Model(self, "../../model/astrollama-3-8b-chat_summary.i1-Q4_K_M.gguf")
+                model = report_model(self, "../../model/astrollama-3-8b-chat_summary.i1-Q4_K_M.gguf")
                 role = "Report writer and critic for Astronomy"
                 return model, role
 

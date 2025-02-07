@@ -13,16 +13,16 @@ class Carousel(QWidget):
     def __init__(self, parent):
         Carousel.buildCarousel(self, parent)
         
-        #super(Carousel, self).__init__()
+        super(Carousel, self).__init__()
         
     def buildCarousel(self, parent) -> QWidget:
         
         parent.carousel = QWidget()
-        parent.carousel.setFixedSize(100,300)
-        parent.carousel.option1 = QPushButton()
-        parent.carousel.option2 = QPushButton()
-        parent.carousel.option3 = QPushButton()
-        
+        parent.carousel.setFixedSize(300,600)
+        parent.carousel.option1 = QPushButton('Analysis Model')
+        parent.carousel.option2 = QPushButton('Analysis')
+        parent.carousel.option3 = QPushButton('What is this')
+
         layout = QVBoxLayout()
         layout.addWidget(parent.carousel.option1)
         layout.addWidget(parent.carousel.option2)
@@ -33,24 +33,33 @@ class Carousel(QWidget):
         parent.carousel.setLayout(layout)
         parent.carousel.show()
         
+      
         def on_Switch_Model():
             if parent.carousel.option1.clicked:
                 if model_Selector.selected == 0:
                     model_Selector.selected = 1
                     model_Selector.select(1)
+                    parent.carousel.option1.setText("Report Model")
                     print("Report Model")
                 else:
                     model_Selector.selected = 0
                     model_Selector.select(0)
-                    print("Analysis Model")
+                    parent.carousel.option1.setText("Analysis Model")
         
-        def on_option2():
+        def on_Data_Analyzer():
             global data_analyzer
             data_analyzer = DataAnalyzer()
             data_analyzer.show()
             
+        def on_option3():
+            parent.carousel.close()
+            
+            
         parent.carousel.option1.clicked.connect(on_Switch_Model)
-        parent.carousel.option2.clicked.connect(on_option2)
+        parent.carousel.option2.clicked.connect(on_Data_Analyzer)
+        parent.carousel.option3.clicked.connect(on_option3)
+
+        
 
         
         
