@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import (
     QPushButton,
     QVBoxLayout,
-    QWidget
+    QWidget,
 )
 from ModelSelection import ModelSelection
 from DataAnalyzer import DataAnalyzer
@@ -13,12 +13,14 @@ class Carousel(QWidget):
     def __init__(self, parent):
         Carousel.buildCarousel(self, parent)
         
-        super(Carousel, self).__init__()
+        #super(Carousel, self).__init__()
         
     def buildCarousel(self, parent) -> QWidget:
         
         parent.carousel = QWidget()
         parent.carousel.setFixedSize(300,600)
+        #parent.carousel.setGeometry(100, 100, 300, 600)
+        #parent.carousel.move(50, 50)
         parent.carousel.option1 = QPushButton('Analysis Model')
         parent.carousel.option2 = QPushButton('Analysis')
         parent.carousel.option3 = QPushButton('What is this')
@@ -27,7 +29,7 @@ class Carousel(QWidget):
         layout.addWidget(parent.carousel.option1)
         layout.addWidget(parent.carousel.option2)
         layout.addWidget(parent.carousel.option3)
-        
+
         model_Selector = ModelSelection()
         
         parent.carousel.setLayout(layout)

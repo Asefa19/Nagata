@@ -15,4 +15,3 @@ window.setFixedSize(width, height)
 
 window.show()
 app.exec()
-
