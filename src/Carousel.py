@@ -18,9 +18,7 @@ class Carousel(QWidget):
     def buildCarousel(self, parent) -> QWidget:
         
         parent.carousel = QWidget()
-        parent.carousel.setFixedSize(300,600)
-        #parent.carousel.setGeometry(100, 100, 300, 600)
-        #parent.carousel.move(50, 50)
+        parent.carousel.setGeometry(45, 85, 300, 600)
         parent.carousel.option1 = QPushButton('Analysis Model')
         parent.carousel.option2 = QPushButton('Analysis')
         parent.carousel.option3 = QPushButton('What is this')

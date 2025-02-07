@@ -2,6 +2,8 @@ from analysis_model import analysis_model
 from report_model import report_model
 from transcription import transcribe
 from llama_cpp import Llama
+import speech_recognition as sr
+
 # Setting up new directory
 #
 class ModelSelection():
