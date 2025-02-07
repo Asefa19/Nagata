@@ -4,6 +4,7 @@ from transcription import transcribe
 from llama_cpp import Llama
 import speech_recognition as sr
 import ModelStore
+from utils import clean_text
 
 # Setting up new directory
 
@@ -33,8 +34,8 @@ class ModelSelection():
         self.user_textInput = textInput
         #user_TextInput = ModelSelection.listen()        
         model, role = self.modelInfo.retrieveModel()
-        
-        rsp = model.llm.create_chat_completion(
+
+        rsp = model.create_chat_completion(
         messages = [
             {"role": "system", "content": f"You are a {role}"},
                 {
@@ -43,6 +44,7 @@ class ModelSelection():
                 }
             ]
         )
+        #rsp = clean_text(rsp)
         return rsp
     
     def listen(self):
