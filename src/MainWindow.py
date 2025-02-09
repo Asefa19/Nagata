@@ -1,6 +1,7 @@
 from DragLabel import DragLabel
 from ModelSelection import ModelSelection
 from Carousel import Carousel
+from ChatWidget import *
 from EventFilter import EventFilter
 from PySide6.QtCore import Qt, QRect
 from PySide6.QtWidgets import (
@@ -12,6 +13,7 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QSpacerItem,
     QSizePolicy,
+    QTextEdit
 )
 from PySide6.QtGui import QPixmap, QScreen
 
@@ -40,7 +42,7 @@ class MainWindow(QMainWindow):
 
         # Tray for the overlay
         self.tray_Label = DragLabel()
-        self.tray_Logo = "../../Nagata/assets/img/nagata_logo_40x39.png"
+        self.tray_Logo = "../assets/img/nagata_logo_40x39.png"
         self.pixmap = QPixmap(self.tray_Logo)
 
         if self.pixmap.isNull():
@@ -75,25 +77,21 @@ class MainWindow(QMainWindow):
         )
         bottom_layout.addItem(self.left_spacer)
         
-        chat_Widget = QWidget()
-        chat_Widget.setFixedSize(0,900)
-        # chat_Widget.setStyleSheet("border: 10px solid black;")
-
-        chat_Label = QLabel("Hello World!", chat_Widget)
-        chat_Label.setStyleSheet(
-            "border: 1px solid black; background-color: lightgreen;"
-        )
-        chat_Label.setWordWrap(True)
-        chat_Label.setAlignment(Qt.AlignBottom | Qt.AlignRight)
-        chat_Label.setFixedSize(300, 500)
-
-        bottom_layout.addWidget(chat_Label)
+        chat_Widget = ChatWidget()
+        chat_Widget.setStyleSheet("background-color: white;")
         bottom_layout.addWidget(chat_Widget)
-        
-        # Event Filter
+        chat_Widget.setFocus()
+
         self.e_filter = EventFilter()
         self.tray_Label.installEventFilter(self.e_filter)
+    
+        self.prompt = None
         
+        chat_Widget.user_Input.connect(self.on_User_Input)
+        
+    def on_User_Input(self, input):
+        self.prompt = input
+        print(self.prompt)
 
         
         
