@@ -3,9 +3,10 @@ import ModelStore
 from analysis_model import analysis_model
 from report_model import report_model
 import ModelSelection
+from utils import filter_response
 
 
-def test_retrieve(inputText):
+def set_model(inputText):
     model = analysis_model("../../model/astrollama-3-8b-chat_summary.i1-Q4_K_M.gguf") 
     role = "Data Analyst for Astronomy"
     #inputText = "how far is the closest star from earth"
@@ -22,4 +23,4 @@ def test_retrieve(inputText):
     return (rsp["choices"][0]["message"]["content"])
 
 if __name__ == '__main__':
-    print(test_retrieve("How far is the closest star to earth?"))
+    print(filter_response(set_model("How far is the closest star to earth?")))
