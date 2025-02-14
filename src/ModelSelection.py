@@ -34,7 +34,6 @@ class ModelSelection():
         self.user_textInput = textInput
         #user_TextInput = ModelSelection.listen()        
         model, role = self.modelInfo.retrieveModel()
-
         rsp = model.create_chat_completion(
         messages = [
             {"role": "system", "content": f"You are a {role}"},
@@ -44,8 +43,7 @@ class ModelSelection():
                 }
             ]
         )
-        #rsp = clean_text(rsp)
-        return rsp
+        return (rsp["choices"][0]["message"]["content"])
     
     def listen(self):
         user_VoiceInput = sr.Recognizer()

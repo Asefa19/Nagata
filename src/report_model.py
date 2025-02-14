@@ -8,7 +8,8 @@ def report_model(model_gguf):
       n_ctx=512,  # The max sequence length to use - note that longer sequence lengths require much more resources
       n_threads=8,            # The number of CPU threads to use, tailor to your system and the resulting performance
       n_gpu_layers=32,         # The number of layers to offload to GPU, if you have GPU acceleration available
-      chat_format="llama-2"
+      chat_format="llama-2",
+      verbose=False
     )
     return llm
 

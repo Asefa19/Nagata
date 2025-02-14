@@ -1,9 +1,10 @@
 from PySide6.QtWidgets import QApplication, QWidget, QLineEdit, QVBoxLayout
 from PySide6.QtWidgets import QLabel, QSizePolicy, QTextEdit, QPushButton
 from PySide6.QtGui import QFontMetrics
-from retrieveModel import set_model
 from utils import filter_response
 import sys
+import ModelStore
+import ModelSelection as ModelSelection
 
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
@@ -23,7 +24,8 @@ class chatWindow(QWidget):
         self.llm_input = llm_input
         layout = QHBoxLayout()
         self.setLayout(layout)
-        
+        model = ModelStore.ModelStore()
+        self.ModelSelection = ModelSelection.ModelSelection()
         chatLayout = QVBoxLayout()
         chatLayout.setSpacing(0)
         
@@ -53,10 +55,8 @@ class chatWindow(QWidget):
         # Push button for sending input to llm
         self.button = QPushButton("Submit")
         # empty label for are a where previous question printed
-        self.label = QLabel("")
-        
+        self.label = QLabel("")     
         self.button.clicked.connect(self.send_text)
-        
         chatLayout.setAlignment(Qt.AlignRight)
         chatLayout.addWidget(self.button)
         chatLayout.addWidget(self.label)
@@ -82,8 +82,7 @@ class chatWindow(QWidget):
         if event.key() == Qt.Key.Key_Return or event.key() == Qt.Key.Key_Enter:
             prompt = self.getPrompt(self.prompt_Window)
             # self.user_Input.emit(prompt)
-            self.get_llm_response(prompt)
-            
+            self.get_llm_response(prompt)           
             self.clear()
         else:
 
@@ -93,37 +92,14 @@ class chatWindow(QWidget):
         # print user question
         self.label.setText(f"You entered: {text}") 
         # send user data to model
-        llm_rsp = set_model(text)
+        llm_rsp = self.ModelSelection.response(text)
         # filter llm output
-        self.history_Widget.setPlainText(filter_response(llm_rsp))
-    
+        self.history_Widget.setPlainText(filter_response(llm_rsp))   
+        
+        
     def send_text(self):
-        text = self.history_Widget.toPlainText()
+        text = self.prompt_Window.toPlainText()
         self.get_llm_response(text)
-
-# class chatWindow(QWidget):
-#     def __init__(self, llm_input, parent=None):
-#         super().__init__(parent)
-#         self.setWindowTitle("NAGATA Chat Window")
-#         # set size of the window
-#         self.resize(1000, 300)
-        
-#         # Line edit with a parent widget
-#         self.top_line_edit = QLineEdit(parent=self)
-#         self.top_line_edit.setStyleSheet("QTextEdit { border: none; }")
-        
-        
-#         # create layout
-#         layout = QVBoxLayout()
-#         layout.addWidget(self.top_line_edit)
-#         layout.addWidget(self.label)
-#         layout.addWidget(self.button)
-#         layout.addWidget(self.bottom_line_edit)
-#         self.setLayout(layout)
-
-#         # set button to send text
-#         self.button.clicked.connect(self.send_text)
-
         
 
 if __name__ == '__main__':
