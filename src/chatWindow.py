@@ -4,6 +4,7 @@ from PySide6.QtGui import QFontMetrics
 from retrieveModel import set_model
 from utils import filter_response
 import sys
+import PromptTextEdit
 
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtWidgets import (
@@ -18,9 +19,9 @@ class chatWindow(QWidget):
     user_Input = Signal(str)
     # history_Widget = QTextEdit()
     # prompt_Window = QTextEdit()
-    def __init__(self, llm_input, parent=None):
+    def __init__(self, parent=None):
         super().__init__()
-        self.llm_input = llm_input
+        # self.llm_input = llm_input
         layout = QHBoxLayout()
         self.setLayout(layout)
         
@@ -28,7 +29,7 @@ class chatWindow(QWidget):
         chatLayout.setSpacing(0)
         
         self.history_Widget = QTextEdit(
-            self.llm_input, parent=self
+            parent=self
         )
         self.history_Widget.setReadOnly(True)
         self.history_Widget.setStyleSheet("background-color: lightgreen")
@@ -45,9 +46,10 @@ class chatWindow(QWidget):
         
         # Bottom Half
         
-        self.prompt_Window = QTextEdit(self.llm_input, parent=self)
+        self.prompt_Window = PromptTextEdit.PromptTextEdit(parent=self)
         self.prompt_Window.setAlignment(Qt.AlignRight)
         self.prompt_Window.setFixedHeight(175)
+        
         chatLayout.addWidget(self.prompt_Window, stretch=1)
         
         # Push button for sending input to llm
@@ -77,17 +79,19 @@ class chatWindow(QWidget):
     def updateHistory():
         return
     
-    def keyPressEvent(self, event):
-        print("Key pressed:", event.key())
-        if event.key() == Qt.Key.Key_Return or event.key() == Qt.Key.Key_Enter:
-            prompt = self.getPrompt(self.prompt_Window)
-            # self.user_Input.emit(prompt)
-            self.get_llm_response(prompt)
+    # def keyPressEvent(self, event):
+    #     print("Key pressed:", event.key())
+    #     if self.prompt_Window.hasFocus():
             
-            self.clear()
-        else:
+    #         if event.key() == Qt.Key.Key_Return or event.key() == Qt.Key.Key_Enter:
+    #             prompt = self.getPrompt(self.prompt_Window)
+    #             # self.user_Input.emit(prompt)
+    #             self.send_text(prompt)
+            
+    #             self.clear()
+    #         else:
 
-            super().keyPressEvent(event)
+    #             super().keyPressEvent(event)
             
     def get_llm_response(self, text):
         # print user question
@@ -128,8 +132,7 @@ class chatWindow(QWidget):
 
 if __name__ == '__main__':
     app = QApplication([])
-    llm_input = ''
-    window = chatWindow(llm_input=llm_input)
+    window = chatWindow()
     # window.adjust_text_area()
     window.show()
     app.exec()
