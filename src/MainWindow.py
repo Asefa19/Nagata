@@ -1,6 +1,7 @@
 from DragLabel import DragLabel
 from ModelSelection import ModelSelection
 from Carousel import Carousel
+from llama_cpp import Llama
 from EventFilter import EventFilter
 from PySide6.QtCore import Qt, QRect
 from PySide6.QtWidgets import (
@@ -21,6 +22,15 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
+        # Model init
+        self.model = Llama(
+            model_path="../../model/astrollama-3-8b-chat_summary.i1-Q4_K_M.gguf",  # Download the model file first
+            n_ctx=512,  # The max sequence length to use - note that longer sequence lengths require much more resources
+            n_threads=8,            # The number of CPU threads to use, tailor to your system and the resulting performance
+            n_gpu_layers=32,         # The number of layers to offload to GPU, if you have GPU acceleration available
+            chat_format="llama-2"
+            )
+        
         # Transparency Flags
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setAttribute(Qt.WA_TranslucentBackground)

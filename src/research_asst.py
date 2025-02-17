@@ -13,8 +13,9 @@ from typing_extensions import TypedDict
 import os
 
 
-def research_asst(query, model):
+def research_asst(query, astroChat):
     # Defining LLM
+    model = 'astroChat'
     llama3 = ChatOllama(model=model, temperature=0)
     llama_json = ChatOllama(model=model, format='json', temperature=0)
 
@@ -253,11 +254,10 @@ def research_asst(query, model):
         print(output["generation"])
         
     run_agent(query)
+    
 
 if __name__ == '__main__':
     #query = 'What is the weather in Florida?'
-    query = 'In this letter, we report the discovery of the highest redshift, " \
-    "heavily obscured, radio-loud QSO candidate selected using JWST NIRCam/MIRI, " \
-    "mid-IR, sub-mm, and radio imaging in the COSMOS-Web field.'
+    query = 'What is solar radiation?'
     model = 'astroChat'
     research_asst(query, model)
