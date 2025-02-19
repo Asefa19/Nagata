@@ -11,8 +11,7 @@ class PromptTextEdit(QTextEdit):
                 self.prompt = self.toPlainText()
                 # self.user_Input.emit(prompt)
                 # self.send_text(prompt)
-            
-                self.clear()
+                #self.clear()
                 print(self.prompt)
             else:
                 super().keyPressEvent(event)
