@@ -19,13 +19,5 @@ class PromptTextEdit(QTextEdit):
             
     def getPrompt(self):
         return self.prompt
-    # def send_text(self):
-    #     text = self.getPrompt(self)
+
         
-    # def get_llm_response(self, text):
-    # # print user question
-    # self.label.setText(f"You entered: {text}") 
-    # # send user data to model
-    # llm_rsp = set_model(text)
-    # # filter llm output
-    # self.history_Widget.setPlainText(filter_response(llm_rsp))

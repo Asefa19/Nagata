@@ -25,6 +25,8 @@ class chatWindow(QWidget):
         layout = QHBoxLayout()
         self.setLayout(layout)
         
+        # self.setWindowFlags(Qt.FramelessWindowHint)
+        
         chatLayout = QVBoxLayout()
         chatLayout.setSpacing(0)
         
@@ -67,7 +69,7 @@ class chatWindow(QWidget):
         layout.setAlignment(Qt.AlignmentFlag(Qt.AlignRight))
         
         self.resize(400,300)
-        self.show()
+        # self.show()
       
     def getPrompt(self):
         return self.prompt_Window.toPlainText()
@@ -78,20 +80,6 @@ class chatWindow(QWidget):
     
     def updateHistory():
         return
-    
-    # def keyPressEvent(self, event):
-    #     print("Key pressed:", event.key())
-    #     if self.prompt_Window.hasFocus():
-            
-    #         if event.key() == Qt.Key.Key_Return or event.key() == Qt.Key.Key_Enter:
-    #             prompt = self.getPrompt(self.prompt_Window)
-    #             # self.user_Input.emit(prompt)
-    #             self.send_text(prompt)
-            
-    #             self.clear()
-    #         else:
-
-    #             super().keyPressEvent(event)
             
     def get_llm_response(self, text):
         # print user question
@@ -105,34 +93,9 @@ class chatWindow(QWidget):
         text = self.history_Widget.toPlainText()
         self.get_llm_response(text)
 
-# class chatWindow(QWidget):
-#     def __init__(self, llm_input, parent=None):
-#         super().__init__(parent)
-#         self.setWindowTitle("NAGATA Chat Window")
-#         # set size of the window
-#         self.resize(1000, 300)
-        
-#         # Line edit with a parent widget
-#         self.top_line_edit = QLineEdit(parent=self)
-#         self.top_line_edit.setStyleSheet("QTextEdit { border: none; }")
-        
-        
-#         # create layout
-#         layout = QVBoxLayout()
-#         layout.addWidget(self.top_line_edit)
-#         layout.addWidget(self.label)
-#         layout.addWidget(self.button)
-#         layout.addWidget(self.bottom_line_edit)
-#         self.setLayout(layout)
-
-#         # set button to send text
-#         self.button.clicked.connect(self.send_text)
-
-        
-
-if __name__ == '__main__':
-    app = QApplication([])
-    window = chatWindow()
-    # window.adjust_text_area()
-    window.show()
-    app.exec()
+# if __name__ == '__main__':
+#     app = QApplication([])
+#     window = chatWindow()
+#     # window.adjust_text_area()
+#     window.show()
+#     app.exec()

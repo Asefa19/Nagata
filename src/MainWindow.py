@@ -1,6 +1,7 @@
 from DragLabel import DragLabel
 from ModelSelection import ModelSelection
 from Carousel import Carousel
+from chatWindow import chatWindow
 from llama_cpp import Llama
 from EventFilter import EventFilter
 from PySide6.QtCore import Qt, QRect
@@ -9,6 +10,7 @@ from PySide6.QtWidgets import (
     QDockWidget,
     QWidget,
     QLabel,
+    QGridLayout,
     QVBoxLayout,
     QHBoxLayout,
     QSpacerItem,
@@ -17,19 +19,21 @@ from PySide6.QtWidgets import (
 from PySide6.QtGui import QPixmap, QScreen
 
 
+
 class MainWindow(QMainWindow):
     
     def __init__(self):
         super().__init__()
 
         # Model init
-        self.model = Llama(
-            model_path="../../model/astrollama-3-8b-chat_summary.i1-Q4_K_M.gguf",  # Download the model file first
-            n_ctx=512,  # The max sequence length to use - note that longer sequence lengths require much more resources
-            n_threads=8,            # The number of CPU threads to use, tailor to your system and the resulting performance
-            n_gpu_layers=32,         # The number of layers to offload to GPU, if you have GPU acceleration available
-            chat_format="llama-2"
-            )
+        # self.model = Llama(
+        #     model_path="../../model/astrollama-3-8b-chat_summary.i1-Q4_K_M.gguf",  # Download the model file first
+        #     n_ctx=512,  # The max sequence length to use - note that longer sequence lengths require much more resources
+        #     n_threads=8,            # The number of CPU threads to use, tailor to your system and the resulting performance
+        #     n_gpu_layers=32,         # The number of layers to offload to GPU, if you have GPU acceleration available
+        #     chat_format="llama-2"
+        #     )
+        self.model = 'astroChat'
         
         # Transparency Flags
         self.setWindowFlags(Qt.FramelessWindowHint)
@@ -46,8 +50,11 @@ class MainWindow(QMainWindow):
         )
         self.addDockWidget(Qt.LeftDockWidgetArea, dock_Widget)
 
-        central_Layout = QVBoxLayout()
-
+        # central_Layout = QVBoxLayout()
+        self.central_Layout = QGridLayout()
+        self.central_Layout.setContentsMargins(0, 0, 0, 0)
+        self.central_Layout.setSpacing(1)
+        
         # Tray for the overlay
         self.tray_Label = DragLabel()
         self.tray_Logo = "../../Nagata/assets/img/nagata_logo_40x39.png"
@@ -63,46 +70,53 @@ class MainWindow(QMainWindow):
         self.tray_Label.setAttribute(Qt.WA_Hover, True)
 
         dock_Widget.setWidget(self.tray_Label)
-        central_Layout.addWidget(dock_Widget)
+        self.chat = chatWindow()
+        
+        self.central_Layout.addWidget(self.chat,2,30)
+        self.central_Layout.addWidget(dock_Widget,1,0)
 
-        self.setLayout(central_Layout)
+        self.setFixedSize(self.central_Layout.sizeHint())
+        self.setLayout(self.central_Layout)
 
         # Setup chat_History
 
+        
         # spacers aren't what I imagined them to be. Look into making the label visible,
         # with background behind
 
-        self.top_spacer = QSpacerItem(
-            20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
-        )
-        central_Layout.addItem(self.top_spacer)
+        # self.top_spacer = QSpacerItem(
+        #     20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
+        # )
+        # central_Layout.addItem(self.top_spacer)
 
-        bottom_layout = QHBoxLayout()
-        self.central_Widget.setLayout(bottom_layout)
+        # bottom_layout = QHBoxLayout()
+        # self.central_Widget.setLayout(bottom_layout)
 
-        self.left_spacer = QSpacerItem(
-            40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
-        )
-        bottom_layout.addItem(self.left_spacer)
+        # self.left_spacer = QSpacerItem(
+        #     40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
+        # )
+        # bottom_layout.addItem(self.left_spacer)
         
-        chat_Widget = QWidget()
-        chat_Widget.setFixedSize(0,900)
-        # chat_Widget.setStyleSheet("border: 10px solid black;")
+        # chat_Widget = QWidget()
+        # chat_Widget.setFixedSize(0,900)
+        # # chat_Widget.setStyleSheet("border: 10px solid black;")
 
-        chat_Label = QLabel("Hello World!", chat_Widget)
-        chat_Label.setStyleSheet(
-            "border: 1px solid black; background-color: lightgreen;"
-        )
-        chat_Label.setWordWrap(True)
-        chat_Label.setAlignment(Qt.AlignBottom | Qt.AlignRight)
-        chat_Label.setFixedSize(300, 500)
+        # chat_Label = QLabel("Hello World!", chat_Widget)
+        # chat_Label.setStyleSheet(
+        #     "border: 1px solid black; background-color: lightgreen;"
+        # )
+        # chat_Label.setWordWrap(True)
+        # chat_Label.setAlignment(Qt.AlignBottom | Qt.AlignRight)
+        # chat_Label.setFixedSize(300, 500)
 
-        bottom_layout.addWidget(chat_Label)
-        bottom_layout.addWidget(chat_Widget)
+        # bottom_layout.addWidget(chat_Label)
+        # bottom_layout.addWidget(chat_Widget)
         
         # Event Filter
         self.e_filter = EventFilter()
         self.tray_Label.installEventFilter(self.e_filter)
+        
+        # self.chat.show()
         
 
         
