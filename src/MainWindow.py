@@ -24,7 +24,6 @@ class MainWindow(QMainWindow):
     
     def __init__(self):
         super().__init__()
-        self.model = 'astroChat'
         
         # Transparency Flags
         self.setWindowFlags(Qt.FramelessWindowHint)

@@ -3,6 +3,7 @@ from PySide6.QtWidgets import QLabel, QSizePolicy, QTextEdit, QPushButton
 from PySide6.QtGui import QFontMetrics
 from retrieveModel import set_model
 from research_asst import research_asst
+from chat_asst import chat_asst
 import sys
 import PromptTextEdit
 
@@ -24,6 +25,7 @@ class chatWindow(QWidget):
         layout = QHBoxLayout()
         self.setLayout(layout)
         self.ra = research_asst()
+        self.ca = chat_asst()
         chatLayout = QVBoxLayout()
         chatLayout.setSpacing(0)
                 
@@ -36,6 +38,7 @@ class chatWindow(QWidget):
         
         self.history_Scroll = QScrollArea()
         self.history_Scroll.setWidget(self.history_Widget)
+        self.history_Widget.setFixedWidth(380)
         self.history_Scroll.setWidgetResizable(True)
         
         chatLayout.addWidget(self.history_Scroll, stretch=1)
@@ -43,8 +46,6 @@ class chatWindow(QWidget):
         # Bottom Half
         self.prompt_Window = PromptTextEdit.PromptTextEdit()
         self.prompt_Window.setAlignment(Qt.AlignRight)
-        self.prompt_Window.setFixedHeight(175)
-                
         chatLayout.addWidget(self.prompt_Window, stretch=1)
         
         # push button for sending input to llm
@@ -69,7 +70,7 @@ class chatWindow(QWidget):
         # print user question
         self.label.setText(f"You entered: {text}") 
         # send user data to model
-        llm_rsp = self.ra.research_asst(text)
+        llm_rsp = self.ca.chat_asst(text)
         # llm output to history window
         print(llm_rsp)
         print(text)

@@ -5,7 +5,7 @@ from chatWindow import chatWindow
 
 app = QApplication([])
 window = MainWindow()
-# chat = chatWindow()
+#chat = chatWindow()
 screen = app.primaryScreen()
 available_Geometry = screen.geometry()
 
@@ -15,5 +15,6 @@ width = (available_Geometry.width())
 window.setFixedSize(width, height)
 
 window.show()
-window.chat.show()
+#chat.show()
+#window.chat.show()
 app.exec()
