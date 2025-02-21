@@ -1,5 +1,4 @@
 from DragLabel import DragLabel
-from ModelSelection import ModelSelection
 from Carousel import Carousel
 from chatWindow import chatWindow
 from llama_cpp import Llama
@@ -60,16 +59,16 @@ class MainWindow(QMainWindow):
         self.tray_Label.setAttribute(Qt.WA_Hover, True)
 
         dock_Widget.setWidget(self.tray_Label)
-        self.chat = chatWindow()
-        self.chat.activateWindow()
-        self.chat.setFocus()
-        self.chat.setEnabled(True)
+        #self.chat = chatWindow()
+        #self.chat.activateWindow()
+        #self.chat.setFocus()
+        #self.chat.setEnabled(True)
         
-        self.central_Layout.addWidget(self.chat,2,30)
-        self.central_Layout.addWidget(dock_Widget,1,0)
+        #self.central_Layout.addWidget(self.chat,2,30)
+        #self.central_Layout.addWidget(dock_Widget,1,0)
 
-        self.setFixedSize(self.central_Layout.sizeHint())
-        self.setLayout(self.central_Layout)
+        #self.setFixedSize(self.central_Layout.sizeHint())
+        #self.setLayout(self.central_Layout)
       
         # Event Filter
         self.e_filter = EventFilter()

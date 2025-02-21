@@ -1,7 +1,7 @@
 from PySide6.QtWidgets import QApplication, QWidget, QLineEdit, QVBoxLayout
 from PySide6.QtWidgets import QLabel, QSizePolicy, QTextEdit, QPushButton
 from PySide6.QtGui import QFontMetrics
-from retrieveModel import set_model
+import ModelStore
 from research_asst import research_asst
 from chat_asst import chat_asst
 import sys
@@ -24,10 +24,12 @@ class chatWindow(QWidget):
         # self.llm_input = llm_input
         layout = QHBoxLayout()
         self.setLayout(layout)
-        self.ra = research_asst()
-        self.ca = chat_asst()
         chatLayout = QVBoxLayout()
         chatLayout.setSpacing(0)
+
+        self.ra = research_asst()
+        self.ca = chat_asst()
+        self.store = ModelStore.ModelStore()
                 
         self.history_Widget = QTextEdit(self)
         self.history_Widget.setReadOnly(True)
@@ -71,8 +73,13 @@ class chatWindow(QWidget):
         # print user question
         self.label.setText(f"You entered: {text}") 
         # send user data to model
-        llm_rsp = self.ca.chat_asst(text)
-        # llm output to history window
+        modelType = self.store.retrieveModel()
+        if modelType == 0:
+            llm_rsp = self.ca.chat_asst(text)
+        elif modelType == 1:
+            llm_rsp = self.ra.research_asst(text)        # llm output to history window
+        else:
+            print('error catch')
         print(llm_rsp)
         print(text)
         self.history_Widget.setPlainText(llm_rsp)
@@ -83,8 +90,8 @@ class chatWindow(QWidget):
         self.get_llm_response(text)
 
 
-# if __name__ == '__main__':
-#     app = QApplication([])
-#     window = chatWindow()
-#     window.show()
-#     app.exec()
+if __name__ == '__main__':
+    app = QApplication([])
+    window = chatWindow()
+    window.show()
+    app.exec()

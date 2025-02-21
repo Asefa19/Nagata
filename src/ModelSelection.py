@@ -6,49 +6,46 @@ import speech_recognition as sr
 import ModelStore
 from utils import clean_text
 
-# Setting up new directory
 
 class ModelSelection():
     selected = 0
     def __init__(self):
-        self.modelInfo = ModelStore.ModelStore()
+        self.modelType = 0
         self.user_textInput=""
+        #self.model_store = ModelStore()
         
-    def select(self, selected_Model):
-        # selected_Model = 0
-        match selected_Model:
-            # Case 0 = analysis model
-            case 0:
-                # model = analysis_model(self, "../../model/astrollama-3-8b-chat_summary.i1-Q4_K_M.gguf")
-                model = analysis_model(self, "../../model/astrollama-3-8b-chat_summary.i1-Q4_K_M.gguf")
-                role = "Data Analyst for Astronomy"
-                self.modelInfo.saveModel(model, role)                
-            # Case 1 = report model
-            case 1:
-                # model = report_model(self, "../../model/astrollama-3-8b-chat_summary.i1-Q4_K_M.gguf")
-                model = report_model(self, "../../model/astrollama-3-8b-chat_summary.i1-Q4_K_M.gguf")
-                role = "Report writer and critic for Astronomy"
-                self.modelInfo.saveModel(model, role)    
+    # def select(self, selected_Model):
+    #     # selected_Model = 0
+    #     match selected_Model:
+    #         # Case 0 = analysis model
+    #         case 0:
+    #             # Chat Model (0)
+    #             modelType = 0            
+    #         # Case 1 = report model
+    #         case 1:
+    #             # Research Model (1)
+    #             modelType = 1 
+    #     return ModelStore.saveModel(modelType)
 
-    def response(self, textInput):
-        self.user_textInput = textInput
-        #user_TextInput = ModelSelection.listen()        
-        model, role = self.modelInfo.retrieveModel()
+    # def response(self, textInput):
+    #     self.user_textInput = textInput
+    #     #user_TextInput = ModelSelection.listen()        
+    #     model, role = self.modelInfo.retrieveModel()
 
-        rsp = model.create_chat_completion(
-        messages = [
-            {"role": "system", "content": f"You are a {role}"},
-                {
-                "role": "user",
-                "content": f"{self.user_textInput}"
-                }
-            ]
-        )
-        #rsp = clean_text(rsp)
-        return rsp
+    #     rsp = model.create_chat_completion(
+    #     messages = [
+    #         {"role": "system", "content": f"You are a {role}"},
+    #             {
+    #             "role": "user",
+    #             "content": f"{self.user_textInput}"
+    #             }
+    #         ]
+    #     )
+    #     #rsp = clean_text(rsp)
+    #     return rsp
     
-    def listen(self):
-        user_VoiceInput = sr.Recognizer()
-        transcription = transcribe(user_VoiceInput)
-        print(transcription)
-        return transcription
+    # def listen(self):
+    #     user_VoiceInput = sr.Recognizer()
+    #     transcription = transcribe(user_VoiceInput)
+    #     print(transcription)
+    #     return transcription
