@@ -15,9 +15,9 @@ from PySide6.QtWidgets import (
     QHBoxLayout,
     QSpacerItem,
     QSizePolicy,
+    QApplication
 )
 from PySide6.QtGui import QPixmap, QScreen
-
 
 
 class MainWindow(QMainWindow):
@@ -61,47 +61,16 @@ class MainWindow(QMainWindow):
 
         dock_Widget.setWidget(self.tray_Label)
         self.chat = chatWindow()
+        self.chat.activateWindow()
+        self.chat.setFocus()
+        self.chat.setEnabled(True)
         
         self.central_Layout.addWidget(self.chat,2,30)
         self.central_Layout.addWidget(dock_Widget,1,0)
 
         self.setFixedSize(self.central_Layout.sizeHint())
         self.setLayout(self.central_Layout)
-
-        # Setup chat_History
-
-        
-        # spacers aren't what I imagined them to be. Look into making the label visible,
-        # with background behind
-
-        # self.top_spacer = QSpacerItem(
-        #     20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding
-        # )
-        # central_Layout.addItem(self.top_spacer)
-
-        # bottom_layout = QHBoxLayout()
-        # self.central_Widget.setLayout(bottom_layout)
-
-        # self.left_spacer = QSpacerItem(
-        #     40, 20, QSizePolicy.Expanding, QSizePolicy.Minimum
-        # )
-        # bottom_layout.addItem(self.left_spacer)
-        
-        # chat_Widget = QWidget()
-        # chat_Widget.setFixedSize(0,900)
-        # # chat_Widget.setStyleSheet("border: 10px solid black;")
-
-        # chat_Label = QLabel("Hello World!", chat_Widget)
-        # chat_Label.setStyleSheet(
-        #     "border: 1px solid black; background-color: lightgreen;"
-        # )
-        # chat_Label.setWordWrap(True)
-        # chat_Label.setAlignment(Qt.AlignBottom | Qt.AlignRight)
-        # chat_Label.setFixedSize(300, 500)
-
-        # bottom_layout.addWidget(chat_Label)
-        # bottom_layout.addWidget(chat_Widget)
-        
+      
         # Event Filter
         self.e_filter = EventFilter()
         self.tray_Label.installEventFilter(self.e_filter)
@@ -109,5 +78,9 @@ class MainWindow(QMainWindow):
         # self.chat.show()
         
 
-        
-        
+    if __name__ == '__main__':
+        app = QApplication([])
+        window = chatWindow()
+        window.show()
+        app.exec()   
+            

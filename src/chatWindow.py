@@ -39,12 +39,13 @@ class chatWindow(QWidget):
         self.history_Scroll = QScrollArea()
         self.history_Scroll.setWidget(self.history_Widget)
         self.history_Widget.setFixedWidth(380)
-        self.history_Scroll.setWidgetResizable(True)
+        #self.history_Scroll.setWidgetResizable(True)
         
         chatLayout.addWidget(self.history_Scroll, stretch=1)
         
         # Bottom Half
         self.prompt_Window = PromptTextEdit.PromptTextEdit()
+        self.prompt_Window.setReadOnly(False)
         self.prompt_Window.setAlignment(Qt.AlignRight)
         chatLayout.addWidget(self.prompt_Window, stretch=1)
         
@@ -82,8 +83,8 @@ class chatWindow(QWidget):
         self.get_llm_response(text)
 
 
-if __name__ == '__main__':
-    app = QApplication([])
-    window = chatWindow()
-    window.show()
-    app.exec()
+# if __name__ == '__main__':
+#     app = QApplication([])
+#     window = chatWindow()
+#     window.show()
+#     app.exec()

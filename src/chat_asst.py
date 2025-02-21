@@ -261,6 +261,6 @@ class chat_asst():
 if __name__ == '__main__':
     #query = 'What is the weather in orlando, Florida?'
     query = 'How many moons does jupiter have?'
-    ra = research_asst()
+    ra = chat_asst()
     llm_output = ra.research_asst(query=query)
     print(llm_output)
