@@ -75,6 +75,9 @@ class MainWindow(QMainWindow):
         self.tray_Label.installEventFilter(self.e_filter)
         
         # self.chat.show()
+        if self.e_filter.build == True:
+            self.carousel = Carousel(self).__init__
+        
         
 
     if __name__ == '__main__':

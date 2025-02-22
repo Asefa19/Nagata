@@ -4,7 +4,6 @@ from Carousel import *
 
 class EventFilter(QObject):
     build = False
-    
     def __init__(self):
         super(EventFilter, self).__init__()
     
@@ -14,9 +13,11 @@ class EventFilter(QObject):
         if isinstance(obj,QLabel):
             if event.type() == QEvent.HoverEnter:
                 # tray expands
-                self.carousel = Carousel(self).__init__(QWidget)
+                # self.carousel = Carousel(self).__init__(QWidget)
+                self.build = True
             elif event.type() == QEvent.HoverLeave:
                 print("Mouse left!")
+                self.build = False
                 # tray hides
 
         return super().eventFilter(obj, event)
