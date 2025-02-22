@@ -73,12 +73,18 @@ class MainWindow(QMainWindow):
         # Event Filter
         self.e_filter = EventFilter()
         self.tray_Label.installEventFilter(self.e_filter)
+        self.carousel = Carousel(self)
+        
+        self.e_filter.build_Signal.connect(self.handleBuildSignal)
         
         # self.chat.show()
-        if self.e_filter.build == True:
-            self.carousel = Carousel(self).__init__
-        
-        
+        # if self.e_filter.build == True:
+        #     self.carousel.__init__(self)
+        #     self.carousel.show()
+    def handleBuildSignal(self, build: bool):
+        if build:
+            self.carousel.buildCarousel(self, build)
+        else: pass
 
     if __name__ == '__main__':
         app = QApplication([])
