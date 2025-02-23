@@ -21,7 +21,7 @@ from PySide6.QtGui import QPixmap, QScreen
 
 class MainWindow(QMainWindow):
     
-    def __init__(self):
+    def __init__(self, modelStore):
         super().__init__()
         
         # Transparency Flags
@@ -63,7 +63,7 @@ class MainWindow(QMainWindow):
         # Event Filter
         self.e_filter = EventFilter()
         self.tray_Label.installEventFilter(self.e_filter)
-        self.carousel = Carousel(self)
+        self.carousel = Carousel(modelStore)
         
         self.e_filter.build_Signal.connect(self.handleBuildSignal)
         self.e_filter.close_Signal.connect(self.handleCloseSignal)

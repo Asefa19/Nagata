@@ -1,4 +1,3 @@
-import analysis_model
 
 class ModelStore():
     def __init__(self):
@@ -7,9 +6,9 @@ class ModelStore():
 
     def saveModel(self, modelType):
         self.modelType = modelType
-        print('Store Model')
+        print('Store Model', self.modelType)
 
         
     def retrieveModel(self):
-        print('Retrieve Model')
+        print('Retrieve Model', self.modelType)
         return self.modelType

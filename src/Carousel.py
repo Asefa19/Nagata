@@ -10,9 +10,10 @@ import ModelStore
 # will make getting and sending info in and out a lot easier.
 
 class Carousel(QWidget):
-    def __init__(self, parent):
+    def __init__(self, modelStore):
+        super().__init__()
         self.modelType = 0
-        self.model_store = ModelStore.ModelStore()
+        self.model_store = modelStore
         
     def buildCarousel(self, parent, build: bool) -> QWidget:    
         if build:
@@ -40,7 +41,8 @@ class Carousel(QWidget):
                     self.modelType = 1
                 else:
                     self.modelType = 0 
-                self.model_store.saveModel(self.modelType)
+            self.model_store.saveModel(self.modelType)
+            carousel.close()
         
         def on_Data_Analyzer():
             global data_analyzer
