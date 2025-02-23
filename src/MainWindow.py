@@ -54,21 +54,11 @@ class MainWindow(QMainWindow):
 
         else:
             self.tray_Label.setPixmap(self.pixmap)
+        
             self.tray_Label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         self.tray_Label.setAttribute(Qt.WA_Hover, True)
-
         dock_Widget.setWidget(self.tray_Label)
-        #self.chat = chatWindow()
-        #self.chat.activateWindow()
-        #self.chat.setFocus()
-        #self.chat.setEnabled(True)
-        
-        #self.central_Layout.addWidget(self.chat,2,30)
-        #self.central_Layout.addWidget(dock_Widget,1,0)
-
-        #self.setFixedSize(self.central_Layout.sizeHint())
-        #self.setLayout(self.central_Layout)
       
         # Event Filter
         self.e_filter = EventFilter()
@@ -76,14 +66,18 @@ class MainWindow(QMainWindow):
         self.carousel = Carousel(self)
         
         self.e_filter.build_Signal.connect(self.handleBuildSignal)
+        self.e_filter.close_Signal.connect(self.handleCloseSignal)
         
-        # self.chat.show()
-        # if self.e_filter.build == True:
-        #     self.carousel.__init__(self)
-        #     self.carousel.show()
     def handleBuildSignal(self, build: bool):
         if build:
+            if self.carousel:
+                self.carousel.destroy()
             self.carousel.buildCarousel(self, build)
+        else: pass
+    
+    def handleCloseSignal(self, close: bool):
+        if close:
+            self.carousel.destroy()
         else: pass
 
     if __name__ == '__main__':

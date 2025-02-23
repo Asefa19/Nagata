@@ -15,6 +15,7 @@ class Carousel(QWidget):
         
     def buildCarousel(self, parent, build: bool) -> QWidget:    
         if build:
+            
             carousel = QWidget()
             carousel.setGeometry(45, 85, 300, 600)
             carousel.option1 = QPushButton('Analysis Model')

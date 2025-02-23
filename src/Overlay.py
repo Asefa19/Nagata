@@ -13,14 +13,10 @@ height = (available_Geometry.height()-70)
 width = (available_Geometry.width())
 
 window.setFixedSize(width, height)
-
 window.show()
+
 chat = chatWindow()
-#chat.show()
-#window.chat.show()
+
 sys.exit(app.exec())
 
-app = QApplication([])
-window = chatWindow()
-window.show()
 app.exec()   
