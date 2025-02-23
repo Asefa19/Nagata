@@ -12,6 +12,7 @@ import ModelStore
 class Carousel(QWidget):
     def __init__(self, parent):
         self.modelType = 0
+        self.model_store = ModelStore.ModelStore()
         
     def buildCarousel(self, parent, build: bool) -> QWidget:    
         if build:
@@ -34,18 +35,12 @@ class Carousel(QWidget):
       
         def on_Switch_Model():
             if carousel.option1.clicked:
-                self.modelType = ModelStore.ModelStore.retrieveModel(self.modelType)
+                self.modelType = self.model_store.retrieveModel()
                 if self.modelType == 0:
                     self.modelType = 1
                 else:
                     self.modelType = 0 
-                ModelStore.ModelStore.saveModel(self.modelType)
-                #carousel.option1.setText("Report Model")
-                #print("Report Model")
-                #else:
-                #    model_Selector.selected = 0
-                #    model_Selector.select(0)
-                #    carousel.option1.setText("Chat Model")
+                self.model_store.saveModel(self.modelType)
         
         def on_Data_Analyzer():
             global data_analyzer
