@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (
 class chatWindow(QWidget):
     user_Input = Signal(str)
 
-    def __init__(self):
+    def __init__(self, model_store):
         super().__init__()
         # self.llm_input = llm_input
         layout = QHBoxLayout()
@@ -29,8 +29,9 @@ class chatWindow(QWidget):
 
         self.ra = research_asst()
         self.ca = chat_asst()
-        self.store = ModelStore.ModelStore()
-                
+        # self.store = ModelStore.ModelStore()
+        self.store = model_store
+        
         self.history_Widget = QTextEdit(self)
         self.history_Widget.setReadOnly(True)
         self.history_Widget.setStyleSheet("background-color: lightgreen")
