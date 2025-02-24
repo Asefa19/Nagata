@@ -53,8 +53,7 @@ class MainWindow(QMainWindow):
             print(f"Failed to load image from {self.tray_Logo}")
 
         else:
-            self.tray_Label.setPixmap(self.pixmap)
-        
+            self.tray_Label.setPixmap(self.pixmap)     
             self.tray_Label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
 
         self.tray_Label.setAttribute(Qt.WA_Hover, True)

@@ -22,7 +22,27 @@ class Carousel(QWidget):
         def on_Switch_Model():
             if carousel.option1.clicked:
                 self.modelType = self.model_store.retrieveModel()
-                
+                     
+                if self.modelType == 0:
+                    self.modelType = 1
+                    carousel.option1.setText('Switch to Analysis')
+                    carousel.option2.setText('Local Reports')
+                    carousel.option3.setText('Web Reports')
+                    
+                    carousel.option2.clicked.connect(on_LocalReports)
+                    carousel.option3.clicked.connect(on_WebReports)
+                    self.model_store.saveModel(self.modelType)            
+                else:
+                    self.modelType = 0 
+                    carousel.option1.setText('Switch to Report')
+                    carousel.option2.setText('Data Visualizer')
+                    carousel.option3.setText('NASA Database')
+                    
+                    carousel.option2.clicked.connect(on_DataAnalyzer)
+                    carousel.option3.clicked.connect(on_NASADatabase)
+                    self.model_store.saveModel(self.modelType)
+                    # carousel.close()
+
         def on_DataAnalyzer():
             global data_analyzer
             data_analyzer = DataAnalyzer()
@@ -61,32 +81,7 @@ class Carousel(QWidget):
             carousel.option1.clicked.connect(on_Switch_Model)
             carousel.option3.clicked.connect(on_NASADatabase)
         else:
-            pass
-      
-        if self.modelType == 0:
-            self.modelType = 1
-            carousel.option1.setText('Switch to Analysis')
-            carousel.option2.setText('Local Reports')
-            carousel.option3.setText('Web Reports')
-            
-            carousel.option2.clicked.connect(on_LocalReports)
-            carousel.option3.clicked.connect(on_WebReports)
-            self.model_store.saveModel(self.modelType)
-
-
-            
-        else:
-            self.modelType = 0 
-            carousel.option1.setText('Switch to Report')
-            carousel.option2.setText('Data Visualizer')
-            carousel.option3.setText('NASA Database')
-            
-            carousel.option2.clicked.connect(on_DataAnalyzer)
-            carousel.option3.clicked.connect(on_NASADatabase)
-            self.model_store.saveModel(self.modelType)
-            # carousel.close()
-
-    
+            pass    
     
 
 
