@@ -79,6 +79,7 @@ class Carousel(QWidget):
             carousel.setLayout(layout)
             carousel.show()
             carousel.option1.clicked.connect(on_Switch_Model)
+            carousel.option2.clicked.connect(on_DataAnalyzer)
             carousel.option3.clicked.connect(on_NASADatabase)
         else:
             pass    
