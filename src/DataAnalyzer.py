@@ -14,9 +14,12 @@ from PySide6.QtWidgets import (
 )
 from PySide6.QtGui import QAction
 from matplotlib import pyplot as plt
-from astroML.datasets import fetch_sdss_spectrum, fetch_sdss_sspp 
-#fetch_dr7_quasar
-#from astroML.plotting import MultiAxes
+from astroML.datasets import (fetch_sdss_spectrum, 
+                              fetch_sdss_sspp, 
+                              fetch_dr7_quasar, 
+                              fetch_nasa_atlas)
+from astroML.plotting import MultiAxes
+from astropy.visualization import hist
 import numpy as np
 
 
@@ -33,34 +36,48 @@ class DataAnalyzer(QWidget):
         
         self.layout = QVBoxLayout(self)
         self.layout.setAlignment(Qt.AlignTop)
-        # Create a menu
-        menu = QMenu("Dataset Analysis", self)
-
+        
+        # Create a Data Analysis menu
+        danalysis = QMenu("Dataset Analysis", self)
         # Add actions to the menu
         SDDS_action = QAction("SDSS", self)
         sdss_sspp = QAction("sdss_sspp", self)
         dr7_quasar_action = QAction("dr7_quasar", self)
-        exit_action = QAction("Exit", self)
-
-        menu.addAction(SDDS_action)
-        menu.addAction(sdss_sspp)
-        menu.addAction(dr7_quasar_action)
-        menu.addAction(exit_action)
-
+        sloan_atlas = QAction("sloan_atlas", self)
+        # add actions to menu
+        danalysis.addAction(SDDS_action)
+        danalysis.addAction(sdss_sspp)
+        danalysis.addAction(dr7_quasar_action)
+        danalysis.addAction(sloan_atlas)
+        # connect actions
         SDDS_action.triggered.connect(self.SDDS)
         sdss_sspp.triggered.connect(self.sdss_sspp)
         dr7_quasar_action.triggered.connect(self.dr7_quasar)
-        exit_action.triggered.connect(self.exit_app)
+        sloan_atlas.triggered.connect(self.atlas)
 
-        # Create a button to show the menu
-        menu_button = QPushButton("File", self)
-        menu_button.setMenu(menu)
-        self.layout.addWidget(menu_button)
+       # Create a Image Database menu
+        iDatabase = QMenu("Image Database", self)
+        # Add actions to the menu
+        SDDS_action = QAction("SDSS", self)
+        sdss_sspp = QAction("sdss_sspp", self)
+        dr7_quasar_action = QAction("dr7_quasar", self)
+        sloan_atlas = QAction("sloan_atlas", self)
+        # add actions to menu
+        iDatabase.addAction(SDDS_action)
+        iDatabase.addAction(sdss_sspp)
+        iDatabase.addAction(dr7_quasar_action)
+        iDatabase.addAction(sloan_atlas)
+        # connect actions
+        SDDS_action.triggered.connect(self.SDDS)
+        sdss_sspp.triggered.connect(self.sdss_sspp)
+        dr7_quasar_action.triggered.connect(self.dr7_quasar)
+        sloan_atlas.triggered.connect(self.atlas)
 
         # Create a menu bar
         menu_bar = QMenuBar(self)
-        menu_bar.addMenu(menu)
-        menu_bar.setSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
+        menu_bar.addMenu(danalysis)
+        menu_bar.addMenu(iDatabase)
+        menu_bar.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
         menu_bar.setFixedHeight(50) # Set fixed height
         self.layout.setMenuBar(menu_bar)
 
@@ -164,35 +181,88 @@ class DataAnalyzer(QWidget):
 
     def dr7_quasar(self):
         print("Save file")
-        # data = fetch_dr7_quasar()
+        data = fetch_dr7_quasar()
 
-        # colors = np.empty((len(data), 5))
+        colors = np.empty((len(data), 5))
 
-        # colors[:, 0] = data['mag_u'] - data['mag_g']
-        # colors[:, 1] = data['mag_g'] - data['mag_r']
-        # colors[:, 2] = data['mag_r'] - data['mag_i']
-        # colors[:, 3] = data['mag_i'] - data['mag_z']
-        # colors[:, 4] = data['mag_z'] - data['mag_J']
+        colors[:, 0] = data['mag_u'] - data['mag_g']
+        colors[:, 1] = data['mag_g'] - data['mag_r']
+        colors[:, 2] = data['mag_r'] - data['mag_i']
+        colors[:, 3] = data['mag_i'] - data['mag_z']
+        colors[:, 4] = data['mag_z'] - data['mag_J']
 
-        # labels = ['u-g', 'g-r', 'r-i', 'i-z', 'z-J']
+        labels = ['u-g', 'g-r', 'r-i', 'i-z', 'z-J']
 
-        # bins = [np.linspace(-0.4, 1.0, 100),
-        #         np.linspace(-0.4, 1.0, 100),
-        #         np.linspace(-0.3, 0.6, 100),
-        #         np.linspace(-0.4, 0.7, 100),
-        #         np.linspace(0, 2.2, 100)]
+        bins = [np.linspace(-0.4, 1.0, 100),
+                np.linspace(-0.4, 1.0, 100),
+                np.linspace(-0.3, 0.6, 100),
+                np.linspace(-0.4, 0.7, 100),
+                np.linspace(0, 2.2, 100)]
 
-        # ax = MultiAxes(5, wspace=0.05, hspace=0.05,
-        #             fig=plt.figure(figsize=(10, 10)))
-        # ax.density(colors, bins)
-        # ax.set_labels(labels)
-        # ax.set_locators(plt.MaxNLocator(5))
-        # plt.suptitle('SDSS DR7 Quasar Colors', fontsize=18)
-        # plt.show()
+        ax = MultiAxes(5, wspace=0.05, hspace=0.05,
+                    fig=plt.figure(figsize=(10, 10)))
+        ax.density(colors, bins)
+        ax.set_labels(labels)
+        ax.set_locators(plt.MaxNLocator(5))
+        plt.suptitle('SDSS DR7 Quasar Colors', fontsize=18)
+        plt.show()
 
 
-    def exit_app(self):
-        QApplication.instance().quit()
+    def atlas(self):
+        data = fetch_nasa_atlas()
+
+        #------------------------------------------------------------
+        # plot the RA/DEC in an area-preserving projection
+
+        RA = data['RA']
+        DEC = data['DEC']
+
+        # convert coordinates to degrees
+        RA -= 180
+        RA *= np.pi / 180
+        DEC *= np.pi / 180
+
+        ax = plt.axes(projection='mollweide')
+        plt.scatter(RA, DEC, s=1, c=data['Z'], cmap=plt.cm.copper,
+                    edgecolors='none', linewidths=0)
+        plt.grid(True)
+
+        plt.title('NASA Atlas Galaxy Locations')
+        cb = plt.colorbar(cax=plt.axes([0.05, 0.1, 0.9, 0.05]),
+                        orientation='horizontal',
+                        ticks=np.linspace(0, 0.05, 6))
+        cb.set_label('redshift')
+
+
+        #------------------------------------------------------------
+        # plot the r vs u-r color-magnitude diagram
+
+        absmag = data['ABSMAG']
+
+        u = absmag[:, 2]
+        r = absmag[:, 4]
+
+        plt.figure()
+        ax = plt.axes()
+        plt.scatter(u - r, r, s=1, lw=0, c=data['Z'], cmap=plt.cm.copper)
+        plt.colorbar(ticks=np.linspace(0, 0.05, 6)).set_label('redshift')
+
+        plt.xlim(0, 3.5)
+        plt.ylim(-10, -24)
+
+        plt.xlabel('u-r')
+        plt.ylabel('r')
+
+        #------------------------------------------------------------
+        # plot a histogram of the redshift
+
+        plt.figure()
+        hist(data['Z'], bins='knuth',
+            histtype='stepfilled', ec='k', fc='#F5CCB0')
+        plt.xlabel('z')
+        plt.ylabel('N(z)')
+
+        plt.show()
 
         
         self.setStyleSheet("""
