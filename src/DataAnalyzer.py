@@ -13,7 +13,7 @@ from PySide6.QtWidgets import (
     QLineEdit
 )
 from PySide6.QtGui import QAction
-from matplotlib import pyplot as plt
+import matplotlib.pyplot as plt
 from astroML.datasets import (fetch_sdss_spectrum, 
                               fetch_sdss_sspp, 
                               fetch_dr7_quasar, 
@@ -21,6 +21,9 @@ from astroML.datasets import (fetch_sdss_spectrum,
 from astroML.plotting import MultiAxes
 from astropy.visualization import hist
 import numpy as np
+import tensorflow_datasets as tfds
+import astro_datasets
+import tensorflow as tf
 
 
 class DataAnalyzer(QWidget):
@@ -32,8 +35,7 @@ class DataAnalyzer(QWidget):
         self.setWindowTitle("Data Analyzer")
         self.resize(1920,1080)
         
-    def build_ui(self):
-        
+    def build_ui(self):      
         self.layout = QVBoxLayout(self)
         self.layout.setAlignment(Qt.AlignTop)
         
@@ -41,37 +43,36 @@ class DataAnalyzer(QWidget):
         danalysis = QMenu("Dataset Analysis", self)
         # Add actions to the menu
         SDDS_action = QAction("SDSS", self)
-        sdss_sspp = QAction("sdss_sspp", self)
+        sdss_sspp_action = QAction("sdss_sspp", self)
         dr7_quasar_action = QAction("dr7_quasar", self)
-        sloan_atlas = QAction("sloan_atlas", self)
+        sloan_atlas_action = QAction("sloan_atlas", self)
         # add actions to menu
         danalysis.addAction(SDDS_action)
-        danalysis.addAction(sdss_sspp)
+        danalysis.addAction(sdss_sspp_action)
         danalysis.addAction(dr7_quasar_action)
-        danalysis.addAction(sloan_atlas)
+        danalysis.addAction(sloan_atlas_action)
         # connect actions
         SDDS_action.triggered.connect(self.SDDS)
-        sdss_sspp.triggered.connect(self.sdss_sspp)
+        sdss_sspp_action.triggered.connect(self.sdss_sspp)
         dr7_quasar_action.triggered.connect(self.dr7_quasar)
-        sloan_atlas.triggered.connect(self.atlas)
-
-       # Create a Image Database menu
+        sloan_atlas_action.triggered.connect(self.atlas)
+       # create a Image Database menu
         iDatabase = QMenu("Image Database", self)
         # Add actions to the menu
-        SDDS_action = QAction("SDSS", self)
-        sdss_sspp = QAction("sdss_sspp", self)
-        dr7_quasar_action = QAction("dr7_quasar", self)
-        sloan_atlas = QAction("sloan_atlas", self)
+        slc_action = QAction("slc", self)
+        mirabell_action = QAction("Mirabell", self)
+        # dr7_quasar_action = QAction("dr7_quasar", self)
+        # sloan_atlas = QAction("sloan_atlas", self)
         # add actions to menu
-        iDatabase.addAction(SDDS_action)
-        iDatabase.addAction(sdss_sspp)
-        iDatabase.addAction(dr7_quasar_action)
-        iDatabase.addAction(sloan_atlas)
+        iDatabase.addAction(slc_action)
+        iDatabase.addAction(mirabell_action)
+        # iDatabase.addAction(dr7_quasar_action)
+        # iDatabase.addAction(sloan_atlas)
         # connect actions
-        SDDS_action.triggered.connect(self.SDDS)
-        sdss_sspp.triggered.connect(self.sdss_sspp)
-        dr7_quasar_action.triggered.connect(self.dr7_quasar)
-        sloan_atlas.triggered.connect(self.atlas)
+        slc_action.triggered.connect(self.slc)
+        mirabell_action.triggered.connect(self.mirabell)
+        # dr7_quasar_action.triggered.connect(self.dr7_quasar)
+        # sloan_atlas.triggered.connect(self.atlas)
 
         # Create a menu bar
         menu_bar = QMenuBar(self)
@@ -85,7 +86,6 @@ class DataAnalyzer(QWidget):
         text, okPressed = QInputDialog.getText(self, "Get Text", "Enter your name:", QLineEdit.Normal, "")
         if okPressed and text != '':
             self.text_edit.setText(text)
-
 
     def SDDS(self):
         plate = 1615
@@ -236,7 +236,6 @@ class DataAnalyzer(QWidget):
 
         #------------------------------------------------------------
         # plot the r vs u-r color-magnitude diagram
-
         absmag = data['ABSMAG']
 
         u = absmag[:, 2]
@@ -255,27 +254,101 @@ class DataAnalyzer(QWidget):
 
         #------------------------------------------------------------
         # plot a histogram of the redshift
-
         plt.figure()
         hist(data['Z'], bins='knuth',
             histtype='stepfilled', ec='k', fc='#F5CCB0')
         plt.xlabel('z')
         plt.ylabel('N(z)')
-
         plt.show()
+         
+    
+    def normalize(image, label):  
+        image = (image - 4.3368458e-13) / 5.503901e-12
+        return image, label
 
+
+    def slc(self):
+        # load mirabest imgames and info
+        tds_slc, info_train = tfds.load(name='slc/space', split='train', with_info=True, as_supervised=True)
+        #mirabest_img, info_train = tfds.load(name='mirabest/all', 
+        #                                 split='train', with_info=True, as_supervised=True)
+        def normalize(image, label):  
+            image = (image - 4.3368458e-13) / 5.503901e-12
+            return image, label
+
+        # convert images to float
+        tds_slc = tds_slc.map(normalize)
         
-        self.setStyleSheet("""
-                           QWidget{
-                               background-color: #f0f0f0;
-                               font-family: Arial;
-                            }
-                            QPushButton{
-                                background-color: #0078d4;
-                                color: white;
-                                padding: 8px;
-                                border-radius:4px;
-                            }
-                            """)
+        for d in tds_slc.take(8):
+            inputs, label = d
+            print(label)
+            plt.figure(figsize=(6, 6))
+            plt.imshow(inputs[:,:,0])
+            plt.show()
+
+    def mirabell(self):
+        mirabell_img, info_train = tfds.load(name='mirabest/all', split='train', with_info=True, as_supervised=True) 
+
+        def img_to_float32(image, label):
+            return tf.image.convert_image_dtype(image, tf.float32), label
         
+        mirabell_img = mirabell_img.map(img_to_float32)
+        for d in mirabell_img.take(2):
+            inputs, label = d
+            print(label)
+            plt.figure(figsize=(6, 6))
+            plt.imshow(inputs[:,:,0])
+            plt.show()
+
+
+    def mlsst(self):
+        mlsst_img, info_mlsst = tfds.load(name='mlsst/Y10', split='train', with_info=True, as_supervised=True)
         
+        def normalize(image, label):  
+            image = tf.math.asinh(image)
+            image -= tf.constant(tf.mean, shape=[1, 1, 3], dtype=image.dtype)
+            image /= tf.constant(tf.std, shape=[1, 1, 3], dtype=image.dtype)
+            return image, label
+
+        mlsst_img = mlsst_img.map(normalize())
+        
+        for d in mlsst_img.take(2):
+            inputs, label = d
+            print(label)
+            print(inputs.shape)
+            plt.figure(figsize=(6, 6))
+            plt.imshow(inputs[:,:,0])
+            plt.show()
+            
+    def sn1a(self):       
+        CMD_FIELDS = ['Mtot', 'Mtot_Nbody', 'HI', 'Mcdm', 'Mgas', 'MgFe', 'Mstar', 'ne', 'P', 'T', 'Vcdm',
+                      'Vgas', 'Z']
+        
+ 
+        def resize(image, label, size):
+            image = tf.image.resize(image, size=[size, size])
+            return image, label
+        
+        def normalize(image, label):  
+            image = tf.math.asinh(image)
+            image = image - 26
+            return image, label
+                    
+        ds, info = tfds.load(name='cmd', 
+                     split='train', 
+                     with_info=True, 
+                     as_supervised=True, 
+                     builder_kwargs={'simulation': 'IllustrisTNG', 'field': 'Mtot_Nbody', 
+                                     'parameters': ['omegam']})
+ 
+        ds = ds.map(lambda image, label: resize(image, label, 64))
+        ds = ds.map(normalize)
+        
+        for d in ds.take(2):
+            inputs, label = d
+            print(label)
+            plt.figure(figsize=(6, 6))
+            plt.imshow(inputs[:,:,0])
+            plt.show()
+            
+      

@@ -7,17 +7,14 @@ from PySide6.QtWidgets import (
     QLabel
 )
 
-class NASADatabase(QWidget):
-    
+class NASADatabase(QWidget):  
     def __init__(self, parent=None):
         super().__init__(parent)
-        self.build_ui()
-        
+        self.build_ui()       
         self.setWindowTitle("Data Analyzer")
         self.resize(1920,1080)
         
-    def build_ui(self):
-        
+    def build_ui(self):       
         self.layout = QVBoxLayout(self)
         self.layout.setAlignment(Qt.AlignTop)
         

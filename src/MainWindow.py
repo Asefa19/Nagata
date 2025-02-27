@@ -19,8 +19,7 @@ from PySide6.QtWidgets import (
 from PySide6.QtGui import QPixmap, QScreen
 
 
-class MainWindow(QMainWindow):
-    
+class MainWindow(QMainWindow):   
     def __init__(self, modelStore):
         super().__init__()
         
@@ -51,7 +50,6 @@ class MainWindow(QMainWindow):
 
         if self.pixmap.isNull():
             print(f"Failed to load image from {self.tray_Logo}")
-
         else:
             self.tray_Label.setPixmap(self.pixmap)     
             self.tray_Label.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)

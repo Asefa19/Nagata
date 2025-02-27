@@ -22,5 +22,4 @@ chat = chatWindow(model_store)
 print(width, height)
 chat.setGeometry(1920, 100, 400, 800)
 sys.exit(app.exec())
-
-app.exec()   
+  

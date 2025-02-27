@@ -5,15 +5,12 @@ import speech_recognition as sr
 def transcribe(self, userVoiceRecognizer):
 
     while(1):
-        try:
-    
-            with sr.Microphone() as UserVoiceInputSource:
-    
+        try:   
+            with sr.Microphone() as UserVoiceInputSource:   
                 userVoiceRecognizer.adjust_for_ambient_noise(UserVoiceInputSource, duration=0.5)
                 print("DJ, come... water...")
                 # The Program listens to the user voice input.
-                UserVoiceInput = userVoiceRecognizer.listen(UserVoiceInputSource)
-    
+                UserVoiceInput = userVoiceRecognizer.listen(UserVoiceInputSource)   
                 UserVoiceInput_converted_to_Text = userVoiceRecognizer.recognize_google(UserVoiceInput)
                 UserVoiceInput_converted_to_Text = UserVoiceInput_converted_to_Text.lower()
                 return(UserVoiceInput_converted_to_Text)

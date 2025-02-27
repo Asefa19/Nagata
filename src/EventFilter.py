@@ -26,8 +26,6 @@ class EventFilter(QObject):
                 self.close_Signal.emit(False)
             elif event.type() == QEvent.HoverLeave:
                 self.close_Signal.emit(True)
-                
-
         return super().eventFilter(obj, event)
     
     # def getBuild(self):
