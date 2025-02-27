@@ -24,10 +24,22 @@ import numpy as np
 import tensorflow_datasets as tfds
 import astro_datasets
 import tensorflow as tf
+import os
+import shutil
+import PIL
+#from createObjWin import objWin
 
 
-class DataAnalyzer(QWidget):
-    
+class objWin(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("Obj Window")
+        layout = QVBoxLayout(self)
+        label = QPushButton("This is another window")
+        layout.addWidget(label)
+        self.setLayout(layout)
+        
+class DataAnalyzer(QWidget):  
     def __init__(self):
         super().__init__()
         self.build_ui()
@@ -60,17 +72,17 @@ class DataAnalyzer(QWidget):
         iDatabase = QMenu("Image Database", self)
         # Add actions to the menu
         slc_action = QAction("slc", self)
-        mirabell_action = QAction("Mirabell", self)
+        planetary_objs_action = QAction("Planetary Objects", self)
         # dr7_quasar_action = QAction("dr7_quasar", self)
         # sloan_atlas = QAction("sloan_atlas", self)
         # add actions to menu
         iDatabase.addAction(slc_action)
-        iDatabase.addAction(mirabell_action)
+        iDatabase.addAction(planetary_objs_action)
         # iDatabase.addAction(dr7_quasar_action)
         # iDatabase.addAction(sloan_atlas)
         # connect actions
         slc_action.triggered.connect(self.slc)
-        mirabell_action.triggered.connect(self.mirabell)
+        planetary_objs_action.triggered.connect(self.planetary_objs)
         # dr7_quasar_action.triggered.connect(self.dr7_quasar)
         # sloan_atlas.triggered.connect(self.atlas)
 
@@ -285,6 +297,14 @@ class DataAnalyzer(QWidget):
             plt.figure(figsize=(6, 6))
             plt.imshow(inputs[:,:,0])
             plt.show()
+
+    def planetary_objs(self):
+        IMAGE_SIZE   = (224, 224)
+        path = "../../PlanetsAndMoons"
+        #dir_list = objectChooser.list_objects(path)
+        #print(dir_list)        
+        obj_window = objWin()
+        obj_window.show()    
 
     def mirabell(self):
         mirabell_img, info_train = tfds.load(name='mirabest/all', split='train', with_info=True, as_supervised=True) 
