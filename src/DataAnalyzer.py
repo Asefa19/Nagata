@@ -2,6 +2,7 @@ from PySide6.QtCore import Qt
 from PySide6.QtWidgets import (
     QPushButton,
     QVBoxLayout,
+    QHBoxLayout,
     QWidget,
     QVBoxLayout,
     QLabel,
@@ -10,7 +11,8 @@ from PySide6.QtWidgets import (
     QSizePolicy,
     QInputDialog,
     QApplication,
-    QLineEdit
+    QLineEdit,
+    QMainWindow
 )
 from PySide6.QtGui import QAction
 import matplotlib.pyplot as plt
@@ -27,83 +29,90 @@ import tensorflow as tf
 import os
 import shutil
 import PIL
-#from createObjWin import objWin
+import sys
 
-
+    
 class objWin(QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Obj Window")
-        layout = QVBoxLayout(self)
-        label = QPushButton("This is another window")
-        layout.addWidget(label)
+          
+        layout = QHBoxLayout()        
+        self.plate_in = QLineEdit()
+        plate_lbl = QLabel("plate")
+        layout.addWidget(plate_lbl)
+        layout.addWidget(self.plate_in)
+        self.mjb_in = QLineEdit()
+        mjb_lbl = QLabel("mjd")
+        layout.addWidget(mjb_lbl)
+        layout.addWidget(self.mjb_in)
+        self.fiber_in = QLineEdit()
+        fiber_lbl = QLabel("fiber")
+        layout.addWidget(fiber_lbl)
+        layout.addWidget(self.fiber_in)
+        self.button = QPushButton("Enter")
+        self.button.clicked.connect(self.get_text)
+        layout.addWidget(self.button)
         self.setLayout(layout)
+
+    def get_text(self):
+        plate_text = int(self.plate_in.text())
+        mjb_text = int(self.mjb_in.text())
+        fiber_text = int(self.fiber_in.text())
         
-class DataAnalyzer(QWidget):  
+        return plate_text, mjb_text, fiber_text 
+        
+class DataAnalyzer(QMainWindow):  
     def __init__(self):
         super().__init__()
         self.build_ui()
-        
         self.setWindowTitle("Data Analyzer")
         self.resize(1920,1080)
         
     def build_ui(self):      
+        self.setWindowTitle("Pulldown Menu Example")
+        menu_bar = self.menuBar()
+        danalysis_menu = menu_bar.addMenu("Dataset Analysis")
+      
         self.layout = QVBoxLayout(self)
         self.layout.setAlignment(Qt.AlignTop)
         
         # Create a Data Analysis menu
-        danalysis = QMenu("Dataset Analysis", self)
         # Add actions to the menu
         SDDS_action = QAction("SDSS", self)
         sdss_sspp_action = QAction("sdss_sspp", self)
         dr7_quasar_action = QAction("dr7_quasar", self)
         sloan_atlas_action = QAction("sloan_atlas", self)
         # add actions to menu
-        danalysis.addAction(SDDS_action)
-        danalysis.addAction(sdss_sspp_action)
-        danalysis.addAction(dr7_quasar_action)
-        danalysis.addAction(sloan_atlas_action)
+        danalysis_menu.addAction(SDDS_action)
+        danalysis_menu.addAction(sdss_sspp_action)
+        danalysis_menu.addAction(dr7_quasar_action)
+        danalysis_menu.addAction(sloan_atlas_action)
         # connect actions
         SDDS_action.triggered.connect(self.SDDS)
         sdss_sspp_action.triggered.connect(self.sdss_sspp)
         dr7_quasar_action.triggered.connect(self.dr7_quasar)
         sloan_atlas_action.triggered.connect(self.atlas)
-       # create a Image Database menu
-        iDatabase = QMenu("Image Database", self)
-        # Add actions to the menu
+        # create a Image Database menu
+        iDatabase = menu_bar.addMenu("Image Database")
         slc_action = QAction("slc", self)
         planetary_objs_action = QAction("Planetary Objects", self)
-        # dr7_quasar_action = QAction("dr7_quasar", self)
-        # sloan_atlas = QAction("sloan_atlas", self)
         # add actions to menu
         iDatabase.addAction(slc_action)
         iDatabase.addAction(planetary_objs_action)
-        # iDatabase.addAction(dr7_quasar_action)
-        # iDatabase.addAction(sloan_atlas)
         # connect actions
         slc_action.triggered.connect(self.slc)
         planetary_objs_action.triggered.connect(self.planetary_objs)
-        # dr7_quasar_action.triggered.connect(self.dr7_quasar)
-        # sloan_atlas.triggered.connect(self.atlas)
-
-        # Create a menu bar
-        menu_bar = QMenuBar(self)
-        menu_bar.addMenu(danalysis)
-        menu_bar.addMenu(iDatabase)
-        menu_bar.setSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
-        menu_bar.setFixedHeight(50) # Set fixed height
         self.layout.setMenuBar(menu_bar)
 
-    def getText(self):
-        text, okPressed = QInputDialog.getText(self, "Get Text", "Enter your name:", QLineEdit.Normal, "")
-        if okPressed and text != '':
-            self.text_edit.setText(text)
+    def SDDS(self):      
+        #plate, mjd, fiber = int(self.planetary_objs())
 
-    def SDDS(self):
         plate = 1615
         mjd = 53166
         fiber = 513
-
+        print(plate, mjd, fiber)
+        
         spec = fetch_sdss_spectrum(plate, mjd, fiber)
 
         #------------------------------------------------------------
@@ -111,19 +120,13 @@ class DataAnalyzer(QWidget):
         ax = plt.axes()
         ax.plot(spec.wavelength(), spec.spectrum, '-k', label='spectrum')
         ax.plot(spec.wavelength(), spec.error, '-', color='gray', label='error')
-
         ax.legend(loc=4)
-
         ax.set_title('Plate = %(plate)i, MJD = %(mjd)i, Fiber = %(fiber)i' % locals())
-
         ax.text(0.05, 0.95, 'z = %.2f' % spec.z, size=16,
                 ha='left', va='top', transform=ax.transAxes)
-
         ax.set_xlabel(r'$\lambda (\AA)$')
         ax.set_ylabel('Flux')
-
         ax.set_ylim(-10, 300)
-
         plt.show()
 
     def sdss_sspp(self):
@@ -190,13 +193,11 @@ class DataAnalyzer(QWidget):
                     extent=[xedges[0], xedges[-1], yedges[0], yedges[-1]])
         plt.show()
 
-
     def dr7_quasar(self):
         print("Save file")
         data = fetch_dr7_quasar()
 
         colors = np.empty((len(data), 5))
-
         colors[:, 0] = data['mag_u'] - data['mag_g']
         colors[:, 1] = data['mag_g'] - data['mag_r']
         colors[:, 2] = data['mag_r'] - data['mag_i']
@@ -219,16 +220,12 @@ class DataAnalyzer(QWidget):
         plt.suptitle('SDSS DR7 Quasar Colors', fontsize=18)
         plt.show()
 
-
     def atlas(self):
         data = fetch_nasa_atlas()
-
         #------------------------------------------------------------
         # plot the RA/DEC in an area-preserving projection
-
         RA = data['RA']
         DEC = data['DEC']
-
         # convert coordinates to degrees
         RA -= 180
         RA *= np.pi / 180
@@ -238,14 +235,11 @@ class DataAnalyzer(QWidget):
         plt.scatter(RA, DEC, s=1, c=data['Z'], cmap=plt.cm.copper,
                     edgecolors='none', linewidths=0)
         plt.grid(True)
-
         plt.title('NASA Atlas Galaxy Locations')
         cb = plt.colorbar(cax=plt.axes([0.05, 0.1, 0.9, 0.05]),
                         orientation='horizontal',
                         ticks=np.linspace(0, 0.05, 6))
         cb.set_label('redshift')
-
-
         #------------------------------------------------------------
         # plot the r vs u-r color-magnitude diagram
         absmag = data['ABSMAG']
@@ -257,13 +251,10 @@ class DataAnalyzer(QWidget):
         ax = plt.axes()
         plt.scatter(u - r, r, s=1, lw=0, c=data['Z'], cmap=plt.cm.copper)
         plt.colorbar(ticks=np.linspace(0, 0.05, 6)).set_label('redshift')
-
         plt.xlim(0, 3.5)
         plt.ylim(-10, -24)
-
         plt.xlabel('u-r')
         plt.ylabel('r')
-
         #------------------------------------------------------------
         # plot a histogram of the redshift
         plt.figure()
@@ -272,12 +263,10 @@ class DataAnalyzer(QWidget):
         plt.xlabel('z')
         plt.ylabel('N(z)')
         plt.show()
-         
-    
+             
     def normalize(image, label):  
         image = (image - 4.3368458e-13) / 5.503901e-12
         return image, label
-
 
     def slc(self):
         # load mirabest imgames and info
@@ -287,7 +276,6 @@ class DataAnalyzer(QWidget):
         def normalize(image, label):  
             image = (image - 4.3368458e-13) / 5.503901e-12
             return image, label
-
         # convert images to float
         tds_slc = tds_slc.map(normalize)
         
@@ -298,14 +286,22 @@ class DataAnalyzer(QWidget):
             plt.imshow(inputs[:,:,0])
             plt.show()
 
+    def open_new_window(self):
+            self.setWindowTitle("Another Window")
+            layout = QVBoxLayout()
+            label = QPushButton("This is another window.")
+            layout.addWidget(label)
+            self.setLayout(layout)
+        
     def planetary_objs(self):
-        IMAGE_SIZE   = (224, 224)
-        path = "../../PlanetsAndMoons"
-        #dir_list = objectChooser.list_objects(path)
-        #print(dir_list)        
-        obj_window = objWin()
-        obj_window.show()    
-
+        self.setWindowTitle("Another Window")
+        layout = QVBoxLayout()
+        label = QPushButton("This is another window.")
+        layout.addWidget(label)
+        self.setLayout(layout) 
+        self.new_window = objWin()
+        self.new_window.show()
+         
     def mirabell(self):
         mirabell_img, info_train = tfds.load(name='mirabest/all', split='train', with_info=True, as_supervised=True) 
 
@@ -319,7 +315,6 @@ class DataAnalyzer(QWidget):
             plt.figure(figsize=(6, 6))
             plt.imshow(inputs[:,:,0])
             plt.show()
-
 
     def mlsst(self):
         mlsst_img, info_mlsst = tfds.load(name='mlsst/Y10', split='train', with_info=True, as_supervised=True)
@@ -342,8 +337,7 @@ class DataAnalyzer(QWidget):
             
     def sn1a(self):       
         CMD_FIELDS = ['Mtot', 'Mtot_Nbody', 'HI', 'Mcdm', 'Mgas', 'MgFe', 'Mstar', 'ne', 'P', 'T', 'Vcdm',
-                      'Vgas', 'Z']
-        
+                      'Vgas', 'Z']       
  
         def resize(image, label, size):
             image = tf.image.resize(image, size=[size, size])
@@ -371,4 +365,9 @@ class DataAnalyzer(QWidget):
             plt.imshow(inputs[:,:,0])
             plt.show()
             
-      
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    main_window = DataAnalyzer()
+    main_window.show()
+    sys.exit(app.exec())
+    
