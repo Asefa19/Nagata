@@ -89,7 +89,10 @@ class Carousel(QWidget):
         else:
             pass    
     
-
+    def close_Carousel(self, enabled):
+        if enabled == True:
+            self.close()
+            self.destroy()
 
 
 
