@@ -61,30 +61,23 @@ class MainWindow(QMainWindow):
         self.e_filter = EventFilter()
         self.tray_Label.installEventFilter(self.e_filter)
         self.carousel = Carousel(modelStore)
+        self.carousel.installEventFilter(self.e_filter)
         
-        self.carousel.buildCarousel(self, True)
+        self.carousel.buildCarousel(self, False)
         self.carousel.setVisible(False)
         
         self.e_filter.build_Signal.connect(self.handleBuildSignal)
         self.e_filter.close_Signal.connect(self.handleCloseSignal)
         
     def handleBuildSignal(self, build: bool):
-        # if build:
-        #     if self.carousel and self.carousel.isEnabled():
-        #         self.carousel.close_Carousel(self.carousel.isEnabled())
-        #         print(self.carousel.isEnabled())
-        #         self.carousel.buildCarousel(self, build)
-        #     else:
-        #         self.carousel.buildCarousel(self,build)
-        #         self.carousel.setEnabled(True)
-        #         print(self.carousel.isEnabled())
-        # else: pass
         if build:
-            if self.carousel and self.carousel.isVisible():
+            if self.carousel == Carousel and self.carousel.isVisible():
                 self.carousel.setVisible(False)
                 self.carousel.setVisible(True)
-            elif self.carousel:
-                self.carousel.setVisible(True)              
+            elif self.carousel == Carousel:
+                self.carousel.setVisible(True)  
+            else:
+                self.carousel.buildCarousel(self, True)            
     
     def handleCloseSignal(self, close: bool):
         if close:

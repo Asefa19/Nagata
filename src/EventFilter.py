@@ -23,8 +23,10 @@ class EventFilter(QObject):
         # Close carousel
         if isinstance(obj, Carousel):
             if event.type() == QEvent.HoverEnter:
+                print('Enter car')
                 self.close_Signal.emit(False)
             elif event.type() == QEvent.HoverLeave:
+                print('Exit car')
                 self.close_Signal.emit(True)
         return super().eventFilter(obj, event)
     
